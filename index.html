@@ -101,9 +101,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Ar
         <div class="form-group">
           <label>Tipo Chasis</label>
           <select id="inp-chasis">
-            <option value="20">Chasis 20'</option>
-            <option value="40">Chasis 40'</option>
-            <option value="Generico" selected>Genérico / Otro</option>
+            <option value="Chasis 20' Normal" selected>Chasis 20' Normal</option>
+            <option value="Chasis 40' Normal">Chasis 40' Normal</option>
+            <option value="3 Ejes Multi">3 Ejes Multi</option>
+            <option value="2 Ejes Multi">2 Ejes Multi</option>
           </select>
         </div>
         <div class="form-group">
@@ -155,8 +156,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Ar
 </div>
 
 <script>
-// !!! AQUÍ SE CONFIGURA TU ENLACE DE GOOGLE SHEETS !!!
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzEclV73Zofw7uIenA8Yn-e4uJ8u6u4G3p011M-p_X4pQz47lX8D1E6q34v7x4E2V_x/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyaTb_uvazW60jXS7eX9Rbv33m9ry0EAZyZDaAnqiLj3yUAi-2uyz5uPn5ymvjGLRrTMw/exec";
 
 const MOV = {
   'E_V': { label: 'Entrada Vacío', bg: 'var(--vd)', border: 'var(--vd)' },
@@ -223,14 +223,11 @@ function registrarMovimiento() {
     obs: obs || 'N/A'
   };
   
-  // 1. Guardar copia local en el teléfono inmediatamente por seguridad
   bitacora.unshift(registro);
   localStorage.setItem('ccti_bitacora', JSON.stringify(bitacora));
   
-  // 2. Enviar inmediatamente en línea a Google Sheets
   enviarACloud(registro);
   
-  // Limpiar campos formulario
   document.getElementById('inp-ppu').value = '';
   document.getElementById('inp-cont').value = '';
   document.getElementById('inp-cliente').value = '';
@@ -293,7 +290,8 @@ function actualizarGraficos() {
       <div class="log-item" style="border-left-color:${borderCol}">
         <span class="log-time">${r.ts.split(' ')[1] || ''}</span>
         <p>${labelMov} — 🚘 ${r.ppu}</p>
-        <p>📦 Cont: ${r.cont} | 🏢 Cli: ${r.cliente} | 📍 Pos: ${r.lugar}</p>
+        <p>📦 Cont: ${r.cont} | 🛞 Chasis: ${r.tipo_chasis}</p>
+        <p>🏢 Cli: ${r.cliente} | 📍 Pos: ${r.lugar}</p>
         ${r.obs !== 'N/A' ? `<p style="font-style:italic;color:var(--txt3);margin-top:2px">⚠️ Obs: ${r.obs}</p>` : ''}
       </div>
     `;
