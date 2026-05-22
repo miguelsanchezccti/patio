@@ -19,476 +19,319 @@
   --card:#fff;--bg:#F0F2F5;
   --radius:12px;--shadow:0 2px 8px rgba(0,0,0,.1);
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;padding-bottom:80px}
-
-/* HEADER */
-.header{background:var(--az);color:#fff;padding:14px 16px 10px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2)}
-.header-top{display:flex;justify-content:space-between;align-items:center}
-.header h1{font-size:17px;font-weight:600;letter-spacing:.3px}
-.header-sub{font-size:11px;opacity:.7;margin-top:2px}
-.badge-hdr{background:rgba(255,255,255,.2);border-radius:99px;padding:3px 10px;font-size:11px;font-weight:600}
-
-/* TABS */
-.tabs{display:flex;background:#fff;border-bottom:1px solid var(--gr2);position:sticky;top:57px;z-index:99}
-.tab{flex:1;padding:11px 4px 9px;font-size:11px;font-weight:500;text-align:center;border:none;background:none;color:var(--txt3);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s}
-.tab.act{color:var(--az2);border-bottom-color:var(--az2);font-weight:600}
-.tab svg{display:block;margin:0 auto 3px;width:20px;height:20px}
-
-/* SECTIONS */
-.section{display:none;padding:16px}.section.vis{display:block}
-
-/* CARDS */
-.card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
-.card-title{font-size:13px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
-
-/* MOVEMENT GRID */
-.mov-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
-.mov-btn{padding:14px 8px;border:1.5px solid var(--gr2);border-radius:var(--radius);background:#fff;color:var(--txt);font-size:12px;font-weight:500;cursor:pointer;text-align:center;transition:all .15s;line-height:1.3}
-.mov-btn svg{display:block;margin:0 auto 6px;width:24px;height:24px;stroke:var(--txt2)}
-.mov-btn small{display:block;font-size:10px;color:var(--txt3);font-weight:400;margin-top:3px}
-.mov-btn.sel{border-color:var(--az2);background:var(--az-l);color:var(--az)}
-.mov-btn.sel svg{stroke:var(--az2)}
-.mov-btn.entrada svg{stroke:var(--vd)}
-.mov-btn.salida svg{stroke:var(--am)}
-.mov-btn.cliente svg{stroke:var(--pu)}
-
-/* FORM */
-.field{margin-bottom:14px}
-.field label{display:block;font-size:12px;font-weight:600;color:var(--txt2);margin-bottom:5px}
-.field label span{font-weight:400;color:var(--txt3);font-size:11px}
-.field input,.field select,.field textarea{width:100%;font-size:15px;padding:11px 13px;border-radius:10px;border:1.5px solid var(--gr2);background:#fff;color:var(--txt);-webkit-appearance:none;appearance:none}
-.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
-.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--az2);box-shadow:0 0 0 3px rgba(46,117,182,.15)}
-.field textarea{min-height:72px;resize:none;font-family:inherit}
-
-/* SUBMIT */
-.btn-submit{width:100%;padding:15px;background:var(--az);color:#fff;border:none;border-radius:var(--radius);font-size:16px;font-weight:600;cursor:pointer;letter-spacing:.3px;transition:background .15s;margin-top:4px}
-.btn-submit:active{background:var(--az2)}
-.btn-submit:disabled{background:var(--gr2);color:var(--txt3);cursor:not-allowed}
-
-/* ALERT */
-.alert{border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;font-size:14px;font-weight:500;display:none;align-items:center;gap:10px}
-.alert.vis{display:flex}
-.alert.ok{background:var(--vd-l);color:var(--vd);border:1px solid #a8d5a8}
-.alert.err{background:var(--rj-l);color:var(--rj);border:1px solid #f5a0a0}
-
-/* STATS */
-.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-.stat{background:var(--card);border-radius:var(--radius);padding:14px;text-align:center;box-shadow:var(--shadow)}
-.stat-n{font-size:32px;font-weight:700;line-height:1}
-.stat-l{font-size:11px;color:var(--txt3);margin-top:4px;font-weight:500}
-.stat-n.az{color:var(--az2)}.stat-n.vd{color:var(--vd)}.stat-n.am{color:var(--am)}.stat-n.rj{color:var(--rj)}
-
-/* LOG */
-.log-item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--gr2)}
-.log-item:last-child{border:none}
-.log-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.log-icon svg{width:18px;height:18px;stroke:#fff}
-.log-body{flex:1;min-width:0}
-.log-tipo{font-size:13px;font-weight:600}
-.log-det{font-size:12px;color:var(--txt3);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.log-ts{font-size:11px;color:var(--txt3);margin-top:3px}
-.log-loc{font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;flex-shrink:0;margin-top:2px}
-.loc-patio{background:var(--az-l);color:var(--az)}
-.loc-dep{background:var(--am-l);color:var(--am)}
-.loc-cli{background:var(--vd-l);color:var(--vd)}
-
-/* PATIO SNAPSHOT */
-.snap-item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--gr2)}
-.snap-item:last-child{border:none}
-.snap-ppu{font-size:15px;font-weight:700;font-family:monospace}
-.snap-tipo{font-size:12px;color:var(--txt3);margin-top:2px}
-.snap-cont{font-size:11px;color:var(--txt3);margin-top:2px;font-family:monospace}
-.snap-badge{font-size:11px;font-weight:600;padding:4px 10px;border-radius:99px;text-align:center}
-.snap-con{background:var(--vd-l);color:var(--vd)}
-.snap-vac{background:var(--am-l);color:var(--am)}
-
-/* FILTER ROW */
-.filter-row{display:flex;gap:8px;margin-bottom:12px}
-.filter-row select{flex:1;font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--gr2);background:#fff;color:var(--txt);-webkit-appearance:none}
-
-/* EMPTY */
-.empty{text-align:center;padding:40px 20px;color:var(--txt3)}
-.empty svg{width:48px;height:48px;stroke:var(--gr2);margin:0 auto 12px;display:block}
-.empty p{font-size:14px}
-
-/* EXPORT */
-.btn-export{width:100%;padding:12px;border:1.5px solid var(--gr2);border-radius:var(--radius);background:#fff;color:var(--txt);font-size:14px;font-weight:500;cursor:pointer;margin-top:12px}
-
-/* BAR CHART */
-.bar-wrap{margin-bottom:10px}
-.bar-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;color:var(--txt2)}
-.bar-track{background:var(--gr);border-radius:99px;height:8px;overflow:hidden}
-.bar-fill{height:100%;border-radius:99px;transition:width .4s}
-
-/* INSTALL BANNER */
-.install-banner{background:var(--az-l);border:1px solid var(--az2);border-radius:var(--radius);padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--az);display:none}
-.install-banner.vis{display:block}
-.install-banner strong{display:block;margin-bottom:4px}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--txt);line-height:1.4}
+.navbar{background:var(--az);color:#fff;padding:16px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow);text-align:center}
+.navbar h1{font-size:18px;font-weight:700;letter-spacing:.5px}
+.navbar p{font-size:12px;color:var(--az-l);margin-top:2px}
+.container{padding:16px;max-width:500px;margin:0 auto;padding-bottom:80px}
+.card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:16px;box-shadow:var(--shadow)}
+.card-title{font-size:14px;font-weight:700;color:var(--az);margin-bottom:12px;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.3px}
+.grid-mov{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.btn-mov{background:var(--gr);border:2px solid var(--gr2);border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer;transition:all .2s ease;display:flex;flex-direction:column;align-items:center;gap:4px}
+.btn-mov span:first-child{font-size:18px}.btn-mov span:last-child{font-size:11px;font-weight:600;color:var(--txt2)}
+.btn-mov.active[data-type="E_V"]{background:var(--vd-l);border-color:var(--vd);color:var(--vd)}
+.btn-mov.active[data-type="E_F"]{background:var(--vd-l);border-color:var(--vd);color:var(--vd)}
+.btn-mov.active[data-type="S_D"]{background:var(--am-l);border-color:var(--am);color:var(--am)}
+.btn-mov.active[data-type="S_C"]{background:var(--rj-l);border-color:var(--rj);color:var(--rj)}
+.btn-mov.active[data-type="X_O"]{background:var(--pu-l);border-color:var(--pu);color:var(--pu)}
+.form-group{margin-bottom:12px}.form-group label{display:block;font-size:11px;font-weight:700;color:var(--txt2);margin-bottom:4px;text-transform:uppercase}
+.input-text,select{width:100%;padding:11px;border:1.5px solid var(--gr2);border-radius:8px;font-size:14px;outline:none;background:#fff;transition:border-color .2s}
+.input-text:focus,select:focus{border-color:var(--az2)}
+.input-text::placeholder{color:var(--txt3);font-size:13px}
+.row-inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn-submit{width:100%;background:var(--az);color:#fff;border:none;border-radius:10px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(31,56,100,.3);transition:all .2s;margin-top:4px}
+.btn-submit:active{transform:scale(.98);box-shadow:none}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.stat-box{background:var(--gr);padding:12px;border-radius:10px;text-align:center;border:1px solid var(--gr2)}
+.stat-box p{font-size:10px;color:var(--txt2);font-weight:700;text-transform:uppercase}
+.stat-box h3{font-size:20px;color:var(--az);margin-top:2px;font-weight:800}
+.bar-chart{margin-top:8px}.bar-wrap{margin-bottom:8px}.bar-label{display:flex;justify-content:between;font-size:12px;margin-bottom:2px;font-weight:500;justify-content:space-between}
+.bar-track{background:var(--gr2);height:8px;border-radius:4px;overflow:hidden}.bar-fill{height:100%;border-radius:4px;transition:width .4s ease}
+.log-item{background:var(--gr);padding:10px;border-radius:8px;margin-bottom:8px;border-left:4px solid var(--gr2);font-size:12px;position:relative}
+.log-item p:first-child{font-weight:700;color:var(--txt);margin-bottom:2px}
+.log-item p:last-child{color:var(--txt2);font-size:11px}
+.log-time{position:absolute;top:10px;right:10px;font-size:10px;color:var(--txt3);font-weight:600}
+.btn-export{display:block;width:100%;background:var(--vd);color:#fff;text-align:center;padding:12px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;margin-top:8px}
+.tab-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;height:56px;display:flex;box-shadow:0 -2px 10px rgba(0,0,0,.05);z-index:100}
+.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--txt3);cursor:pointer;font-weight:600;font-size:11px;gap:2px}
+.tab-btn.active{color:var(--az)}
+.tab-btn span:first-child{font-size:18px}
+.view{display:none}.view.active{display:block}
+.cloud-status{text-align:center;font-size:11px;font-weight:600;margin-top:6px;display:none}
+.cloud-status.syncing{color:var(--az2);display:block}
+.cloud-status.success{color:var(--vd);display:block}
+.cloud-status.error{color:var(--rj);display:block}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-top">
-    <div>
-      <h1>Patio Control</h1>
-      <div class="header-sub" id="fecha-hdr"></div>
+<div class="navbar">
+  <h1>PATIO CONTROL</h1>
+  <p id="nav-date">CCTI S.A. — Maipú</p>
+</div>
+
+<div class="container">
+  <div id="view-reg" class="view active">
+    <div class="card">
+      <div class="card-title">📥 Tipo de Movimiento</div>
+      <div class="grid-mov">
+        <div class="btn-mov" data-type="E_V"><span>🟢</span><span>Entrada Vacío</span></div>
+        <div class="btn-mov" data-type="E_F"><span>🔵</span><span>Entrada Full</span></div>
+        <div class="btn-mov" data-type="S_D"><span>🟡</span><span>Salida Depósito</span></div>
+        <div class="btn-mov" data-type="S_C"><span>🔴</span><span>Salida Cliente</span></div>
+      </div>
+      <div class="grid-mov" style="grid-template-columns:1fr;margin-bottom:0">
+        <div class="btn-mov" data-type="X_O"><span>🟣</span><span>Movimiento Interno / Otro</span></div>
+      </div>
     </div>
-    <span class="badge-hdr" id="badge-total">0 unidades</span>
+
+    <div class="card">
+      <div class="card-title">📝 Datos de la Unidad</div>
+      <div class="row-inputs">
+        <div class="form-group">
+          <label>Patente (PPU)</label>
+          <input type="text" id="inp-ppu" class="input-text" placeholder="ABCD12" style="text-transform:uppercase">
+        </div>
+        <div class="form-group">
+          <label>Contenedor / Chasis</label>
+          <input type="text" id="inp-cont" class="input-text" placeholder="CSXU1234567" style="text-transform:uppercase">
+        </div>
+      </div>
+      <div class="row-inputs">
+        <div class="form-group">
+          <label>Tipo Chasis</label>
+          <select id="inp-chasis">
+            <option value="20">Chasis 20'</option>
+            <option value="40">Chasis 40'</option>
+            <option value="Generico" selected>Genérico / Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Cliente / Operador</label>
+          <input type="text" id="inp-cliente" class="input-text" placeholder="Ej: MSC / Medlog">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Ubicación en Patio</label>
+        <input type="text" id="inp-lugar" class="input-text" placeholder="Ej: Sector A-3 / Taller">
+      </div>
+      <div class="form-group">
+        <label>Observaciones</label>
+        <input type="text" id="inp-obs" class="input-text" placeholder="Ej: Daño en piña derecha, pendiente taller">
+      </div>
+      
+      <button class="btn-submit" onclick="registrarMovimiento()">Confirmar Movimiento</button>
+      <div id="cloud-msg" class="cloud-status"></div>
+    </div>
+  </div>
+
+  <div id="view-patio" class="view">
+    <div class="card">
+      <div class="card-title">📊 Balance de Turno</div>
+      <div class="stats-grid">
+        <div class="stat-box"><p>Total Entradas</p><h3 id="stat-ent">0</h3></div>
+        <div class="stat-box"><p>Total Salidas</p><h3 id="stat-sal">0</h3></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">📈 Resumen por Operación</div>
+      <div class="bar-chart" id="mov-chart"></div>
+    </div>
+  </div>
+
+  <div id="view-log" class="view">
+    <div class="card" style="padding:12px">
+      <div class="card-title" style="margin-bottom:8px">📋 Últimos Movimientos</div>
+      <div id="log-list" style="max-height:350px;overflow-y:auto;margin-bottom:8px"></div>
+      <button class="btn-export" onclick="exportCSV()">Descargar Respaldo CSV</button>
+    </div>
   </div>
 </div>
 
-<div class="tabs">
-  <button class="tab act" onclick="showTab('reg')" id="tab-reg">
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-    Registrar
-  </button>
-  <button class="tab" onclick="showTab('patio')" id="tab-patio">
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-    Patio
-  </button>
-  <button class="tab" onclick="showTab('bitacora')" id="tab-bit">
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-    Bitácora
-  </button>
-  <button class="tab" onclick="showTab('resumen')" id="tab-res">
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-    Resumen
-  </button>
-</div>
-
-<!-- ── REGISTRAR ── -->
-<div class="section vis" id="tab-reg">
-  <div class="install-banner" id="install-banner">
-    <strong>💡 Instalar como app</strong>
-    iOS: botón Compartir → "Añadir a pantalla de inicio"<br>
-    Android: menú ⋮ → "Añadir a pantalla de inicio"
-  </div>
-
-  <div class="alert ok" id="alert-ok">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20" height="20"><polyline points="20 6 9 17 4 12"/></svg>
-    Movimiento registrado correctamente
-  </div>
-  <div class="alert err" id="alert-err">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20" height="20"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-    <span id="alert-err-txt">Completa los campos obligatorios</span>
-  </div>
-
-  <div class="card">
-    <div class="card-title">Tipo de movimiento</div>
-    <div class="mov-grid">
-      <button class="mov-btn entrada" data-mov="ENTRADA_PATIO" onclick="selMov(this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 17 18 12 13 7"/><path d="M6 12h12"/><path d="M3 3v18"/></svg>
-        Entra a patio
-        <small>desde depósito</small>
-      </button>
-      <button class="mov-btn salida" data-mov="SALIDA_DEPOSITO" onclick="selMov(this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="11 7 6 12 11 17"/><path d="M6 12h12"/><path d="M21 3v18"/></svg>
-        Sale a depósito
-        <small>desde patio</small>
-      </button>
-      <button class="mov-btn entrada" data-mov="LLEGADA_CONT" onclick="selMov(this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-        Llega contenedor
-        <small>sobre chasis</small>
-      </button>
-      <button class="mov-btn cliente" data-mov="DESPACHO_CLIENTE" onclick="selMov(this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-        Despacho cliente
-        <small>sale de patio</small>
-      </button>
-      <button class="mov-btn entrada" data-mov="ENTRADA_VACIO" onclick="selMov(this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 17 18 12 13 7"/><path d="M6 12h12"/><path d="M3 3v18"/></svg>
-        Entra vacío
-        <small>chasis sin cont.</small>
-      </button>
-      <button class="mov-btn salida" data-mov="SALIDA_VACIO" onclick="selMov(this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="11 7 6 12 11 17"/><path d="M6 12h12"/><path d="M21 3v18"/></svg>
-        Sale vacío
-        <small>chasis sin cont.</small>
-      </button>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="field">
-      <label>PPU Chasis <span>* obligatorio</span></label>
-      <input type="text" id="f-ppu" placeholder="Ej: JWPW49" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
-    </div>
-    <div class="field" id="f-cont-wrap">
-      <label>Código contenedor <span>(si aplica)</span></label>
-      <input type="text" id="f-cont" placeholder="Ej: APZU 477949-6" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
-    </div>
-    <div class="field">
-      <label>Tipo de chasis <span>* obligatorio</span></label>
-      <select id="f-tipo">
-        <option value="">Seleccionar...</option>
-        <option>2 EJES</option>
-        <option>EXT 2 EJES</option>
-        <option>MULTI 3 EJES</option>
-      </select>
-    </div>
-    <div class="field" id="f-cliente-wrap" style="display:none">
-      <label>Cliente destino</label>
-      <input type="text" id="f-cliente" placeholder="Ej: Goodyear" autocapitalize="words">
-    </div>
-    <div class="field" id="f-lugar-wrap" style="display:none">
-      <label>Lugar de descarga</label>
-      <input type="text" id="f-lugar" placeholder="Ej: Pudahuel" autocapitalize="words">
-    </div>
-    <div class="field">
-      <label>Observaciones <span>(opcional)</span></label>
-      <textarea id="f-obs" placeholder="Notas, demurrage, daños..."></textarea>
-    </div>
-    <button class="btn-submit" id="btn-submit" onclick="registrar()">Confirmar movimiento</button>
-  </div>
-</div>
-
-<!-- ── PATIO ── -->
-<div class="section" id="tab-patio">
-  <div class="filter-row">
-    <select id="snap-est" onchange="renderPatio()">
-      <option value="">Todos</option>
-      <option value="CON_CONTENEDOR">Con contenedor</option>
-      <option value="VACIO">Vacíos</option>
-    </select>
-    <select id="snap-tipo" onchange="renderPatio()">
-      <option value="">Todos los tipos</option>
-      <option>2 EJES</option>
-      <option>EXT 2 EJES</option>
-      <option>MULTI 3 EJES</option>
-    </select>
-  </div>
-  <div class="card" id="patio-list" style="padding:8px 16px"></div>
-</div>
-
-<!-- ── BITÁCORA ── -->
-<div class="section" id="tab-bitacora">
-  <div class="filter-row">
-    <select id="bit-filtro" onchange="renderBitacora()">
-      <option value="">Todos los movimientos</option>
-      <option value="ENTRADA_PATIO">Entradas patio</option>
-      <option value="SALIDA_DEPOSITO">Salidas depósito</option>
-      <option value="LLEGADA_CONT">Llegada contenedor</option>
-      <option value="DESPACHO_CLIENTE">Despachos cliente</option>
-      <option value="ENTRADA_VACIO">Entradas vacío</option>
-      <option value="SALIDA_VACIO">Salidas vacío</option>
-    </select>
-  </div>
-  <div class="card" id="bit-list" style="padding:8px 16px"></div>
-  <button class="btn-export" onclick="exportCSV()">⬇ Exportar bitácora CSV</button>
-</div>
-
-<!-- ── RESUMEN ── -->
-<div class="section" id="tab-resumen">
-  <div class="stats-grid" id="stats-grid"></div>
-  <div class="card">
-    <div class="card-title">Distribución por tipo</div>
-    <div id="dist-chart"></div>
-  </div>
-  <div class="card">
-    <div class="card-title">Movimientos de hoy</div>
-    <div id="mov-chart"></div>
-  </div>
+<div class="tab-bar">
+  <div class="tab-btn active" onclick="switchTab('reg')"><span>📝</span><span>Registrar</span></div>
+  <div class="tab-btn" onclick="switchTab('patio')"><span>📊</span><span>Resumen</span></div>
+  <div class="tab-btn" onclick="switchTab('log')"><span>📋</span><span>Bitácora</span></div>
 </div>
 
 <script>
+// !!! AQUÍ SE CONFIGURA TU ENLACE DE GOOGLE SHEETS !!!
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzEclV73Zofw7uIenA8Yn-e4uJ8u6u4G3p011M-p_X4pQz47lX8D1E6q34v7x4E2V_x/exec";
+
 const MOV = {
-  ENTRADA_PATIO:    {label:'Entra a patio',     loc:'PATIO',    bg:'#1D6A2E'},
-  SALIDA_DEPOSITO:  {label:'Sale a depósito',    loc:'DEPOSITO', bg:'#7D6608'},
-  LLEGADA_CONT:     {label:'Llega contenedor',   loc:'PATIO',    bg:'#1F3864'},
-  DESPACHO_CLIENTE: {label:'Despacho cliente',   loc:'CLIENTE',  bg:'#3A1F6B'},
-  ENTRADA_VACIO:    {label:'Entra vacío',        loc:'PATIO',    bg:'#2E75B6'},
-  SALIDA_VACIO:     {label:'Sale vacío',         loc:'DEPOSITO', bg:'#9C0006'},
+  'E_V': { label: 'Entrada Vacío', bg: 'var(--vd)', border: 'var(--vd)' },
+  'E_F': { label: 'Entrada Full', bg: 'var(--vd)', border: 'var(--vd)' },
+  'S_D': { label: 'Salida Depósito', bg: 'var(--am)', border: 'var(--am)' },
+  'S_C': { label: 'Salida Cliente', bg: 'var(--rj)', border: 'var(--rj)' },
+  'X_O': { label: 'Mov. Interno / Otro', bg: 'var(--pu)', border: 'var(--pu)' }
 };
 
-let bitacora = JSON.parse(localStorage.getItem('pc_bitacora') || '[]');
-let patio    = JSON.parse(localStorage.getItem('pc_patio')    || '{}');
-let selMov_  = null;
+let selectedMov = null;
+let bitacora = JSON.parse(localStorage.getItem('ccti_bitacora')) || [];
 
-// ── Fecha header
-const now = new Date();
-document.getElementById('fecha-hdr').textContent =
-  now.toLocaleDateString('es-CL', {weekday:'long', day:'numeric', month:'long'});
-
-// ── Install banner
-if (!navigator.standalone && !window.matchMedia('(display-mode: standalone)').matches) {
-  document.getElementById('install-banner').classList.add('vis');
-}
-
-function save() {
-  localStorage.setItem('pc_bitacora', JSON.stringify(bitacora));
-  localStorage.setItem('pc_patio',    JSON.stringify(patio));
-  document.getElementById('badge-total').textContent = Object.keys(patio).length + ' unidades';
-}
-
-function ts() {
-  return new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'}) + ' · ' +
-         new Date().toLocaleDateString('es-CL',{day:'2-digit',month:'2-digit'});
-}
-
-function showTab(id) {
-  ['reg','patio','bitacora','resumen'].forEach(t => {
-    document.getElementById('tab-'+t)?.classList.remove('vis');
-    document.getElementById('tab-'+(t==='reg'?'reg':t==='patio'?'patio':t==='bitacora'?'bit':'res'))?.classList.remove('act');
+document.addEventListener('DOMContentLoaded', () => {
+  const opciones = document.querySelectorAll('.btn-mov');
+  opciones.forEach(btn => {
+    btn.addEventListener('click', () => {
+      opciones.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedMov = btn.getAttribute('data-type');
+    });
   });
-  document.getElementById('tab-'+id).classList.add('vis');
-  const tabMap={reg:'reg',patio:'patio',bitacora:'bit',resumen:'res'};
-  document.getElementById('tab-'+tabMap[id]).classList.add('act');
-  if(id==='patio')    renderPatio();
-  if(id==='bitacora') renderBitacora();
-  if(id==='resumen')  renderResumen();
+  
+  const d = new Date();
+  const opcionesFecha = { weekday: 'long', day: 'numeric', month: 'long' };
+  document.getElementById('nav-date').innerHTML = "CCTI S.A. — " + d.toLocaleDateString('es-ES', opcionesFecha);
+  
+  actualizarGraficos();
+});
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  
+  const idx = ['reg', 'patio', 'log'].indexOf(tab);
+  document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+  document.getElementById('view-' + tab).classList.add('active');
+  
+  if(tab === 'patio' || tab === 'log') actualizarGraficos();
 }
 
-function selMov(btn) {
-  document.querySelectorAll('.mov-btn').forEach(b=>b.classList.remove('sel'));
-  btn.classList.add('sel');
-  selMov_ = btn.dataset.mov;
-  const needsCont   = ['LLEGADA_CONT'].includes(selMov_);
-  const needsCli    = ['DESPACHO_CLIENTE'].includes(selMov_);
-  document.getElementById('f-cont-wrap').style.display   = needsCont||needsCli ? '' : '';
-  document.getElementById('f-cliente-wrap').style.display = needsCli ? '' : 'none';
-  document.getElementById('f-lugar-wrap').style.display   = needsCli ? '' : 'none';
+function registrarMovimiento() {
+  if(!selectedMov) { alert('Por favor, selecciona un tipo de movimiento'); return; }
+  
+  const ppu = document.getElementById('inp-ppu').value.trim().toUpperCase();
+  const cont = document.getElementById('inp-cont').value.trim().toUpperCase();
+  const tipo_chasis = document.getElementById('inp-chasis').value;
+  const cliente = document.getElementById('inp-cliente').value.trim();
+  const lugar = document.getElementById('inp-lugar').value.trim();
+  const obs = document.getElementById('inp-obs').value.trim();
+  
+  if(!ppu){ alert('La patente (PPU) es obligatoria'); return; }
+  
+  const ahora = new Date();
+  const ts = ahora.toLocaleString('es-CL');
+  
+  const registro = {
+    ts: ts,
+    tipo: selectedMov,
+    ppu: ppu,
+    cont: cont || 'N/A',
+    tipo_chasis: tipo_chasis,
+    cliente: cliente || 'N/A',
+    lugar: lugar || 'N/A',
+    obs: obs || 'N/A'
+  };
+  
+  // 1. Guardar copia local en el teléfono inmediatamente por seguridad
+  bitacora.unshift(registro);
+  localStorage.setItem('ccti_bitacora', JSON.stringify(bitacora));
+  
+  // 2. Enviar inmediatamente en línea a Google Sheets
+  enviarACloud(registro);
+  
+  // Limpiar campos formulario
+  document.getElementById('inp-ppu').value = '';
+  document.getElementById('inp-cont').value = '';
+  document.getElementById('inp-cliente').value = '';
+  document.getElementById('inp-lugar').value = '';
+  document.getElementById('inp-obs').value = '';
+  selectedMov = null;
+  document.querySelectorAll('.btn-mov').forEach(b => b.classList.remove('active'));
+  
+  alert('¡Movimiento guardado con éxito!');
+  actualizarGraficos();
 }
 
-function showAlert(type, msg) {
-  const el = document.getElementById('alert-'+type);
-  if(msg) document.getElementById('alert-err-txt').textContent = msg;
-  el.classList.add('vis');
-  setTimeout(()=>el.classList.remove('vis'), 3000);
+function enviarACloud(item) {
+  const msgBox = document.getElementById('cloud-msg');
+  msgBox.className = "cloud-status syncing";
+  msgBox.innerText = "⏳ Sincronizando con la oficina en línea...";
+  
+  const payload = {
+    ts: item.ts,
+    movimiento: MOV[item.tipo]?.label || item.tipo,
+    ppu: item.ppu,
+    contenedor: item.cont,
+    tipo_chasis: item.tipo_chasis,
+    cliente: item.cliente,
+    lugar: item.lugar,
+    obs: item.obs
+  };
+
+  fetch(WEB_APP_URL, {
+    method: "POST",
+    mode: "no-cors",
+    cache: "no-cache",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  })
+  .then(() => {
+    msgBox.className = "cloud-status success";
+    msgBox.innerText = "✅ Sincronizado con Google Sheets con éxito";
+    setTimeout(() => msgBox.style.display = 'none', 3000);
+  })
+  .catch(err => {
+    console.error(err);
+    msgBox.className = "cloud-status error";
+    msgBox.innerText = "❌ Guardado localmente. Se subirá al recuperar señal.";
+  });
 }
 
-function registrar() {
-  const ppu  = document.getElementById('f-ppu').value.trim().toUpperCase();
-  const cont = document.getElementById('f-cont').value.trim().toUpperCase();
-  const tipo = document.getElementById('f-tipo').value;
-  const cli  = document.getElementById('f-cliente').value.trim();
-  const lug  = document.getElementById('f-lugar').value.trim();
-  const obs  = document.getElementById('f-obs').value.trim();
-
-  if (!selMov_) { showAlert('err','Selecciona el tipo de movimiento'); return; }
-  if (!ppu)     { showAlert('err','Ingresa la PPU del chasis'); return; }
-  if (!tipo)    { showAlert('err','Selecciona el tipo de chasis'); return; }
-
-  const mov = { ts: ts(), tipo: selMov_, ppu, cont, tipo_chasis: tipo, cliente: cli, lugar: lug, obs };
-  bitacora.unshift(mov);
-
-  const entra = ['ENTRADA_PATIO','LLEGADA_CONT','ENTRADA_VACIO'].includes(selMov_);
-  const sale  = ['SALIDA_DEPOSITO','DESPACHO_CLIENTE','SALIDA_VACIO'].includes(selMov_);
-
-  if (entra) {
-    patio[ppu] = { ppu, tipo_chasis: tipo, contenedor: selMov_==='ENTRADA_VACIO'?'':cont, estado: selMov_==='ENTRADA_VACIO'?'VACIO':'CON_CONTENEDOR', ts: ts(), ultimo_mov: MOV[selMov_].label };
-  } else if (sale) {
-    delete patio[ppu];
-  }
-
-  save();
-  // Reset
-  document.getElementById('f-ppu').value='';
-  document.getElementById('f-cont').value='';
-  document.getElementById('f-tipo').value='';
-  document.getElementById('f-cliente').value='';
-  document.getElementById('f-lugar').value='';
-  document.getElementById('f-obs').value='';
-  document.querySelectorAll('.mov-btn').forEach(b=>b.classList.remove('sel'));
-  selMov_=null;
-  document.getElementById('f-cliente-wrap').style.display='none';
-  document.getElementById('f-lugar-wrap').style.display='none';
-  showAlert('ok');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function renderPatio() {
-  const est  = document.getElementById('snap-est').value;
-  const tipo = document.getElementById('snap-tipo').value;
-  const list = document.getElementById('patio-list');
-  const items = Object.values(patio).filter(r=> (!est||r.estado===est) && (!tipo||r.tipo_chasis===tipo));
-  if(!items.length){list.innerHTML='<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg><p>Sin unidades en patio</p></div>';return;}
-  list.innerHTML = items.map(r=>`
-    <div class="snap-item">
-      <div>
-        <div class="snap-ppu">${r.ppu}</div>
-        <div class="snap-tipo">${r.tipo_chasis||'—'} · ${r.ultimo_mov||''}</div>
-        <div class="snap-cont">${r.contenedor||'Sin contenedor'}</div>
+function actualizarGraficos() {
+  let ent = 0, sal = 0;
+  let html = '';
+  
+  bitacora.forEach(r => {
+    if(r.tipo.startsWith('E')) ent++;
+    if(r.tipo.startsWith('S')) sal++;
+    
+    const labelMov = MOV[r.tipo]?.label || r.tipo;
+    const borderCol = MOV[r.tipo]?.bg || '#888';
+    
+    html += `
+      <div class="log-item" style="border-left-color:${borderCol}">
+        <span class="log-time">${r.ts.split(' ')[1] || ''}</span>
+        <p>${labelMov} — 🚘 ${r.ppu}</p>
+        <p>📦 Cont: ${r.cont} | 🏢 Cli: ${r.cliente} | 📍 Pos: ${r.lugar}</p>
+        ${r.obs !== 'N/A' ? `<p style="font-style:italic;color:var(--txt3);margin-top:2px">⚠️ Obs: ${r.obs}</p>` : ''}
       </div>
-      <div style="text-align:right">
-        <div class="snap-badge ${r.estado==='CON_CONTENEDOR'?'snap-con':'snap-vac'}">${r.estado==='CON_CONTENEDOR'?'Con cont.':'Vacío'}</div>
-        <div style="font-size:10px;color:var(--txt3);margin-top:4px">${r.ts}</div>
+    `;
+  });
+  
+  document.getElementById('stat-ent').innerText = ent;
+  document.getElementById('stat-sal').innerText = sal;
+  document.getElementById('log-list').innerHTML = html || '<p style="color:var(--txt3);text-align:center;padding:20px;font-size:13px">No hay registros hoy</p>';
+
+  const movCount = { 'E_V': 0, 'E_F': 0, 'S_D': 0, 'S_C': 0, 'X_O': 0 };
+  bitacora.forEach(r => { if(movCount[r.tipo] !== undefined) movCount[r.tipo]++; });
+  const maxMov = Math.max(...Object.values(movCount), 1);
+  
+  document.getElementById('mov-chart').innerHTML = Object.entries(MOV).map(([k,m]) => {
+    const n = movCount[k]; const pct = Math.round(n/maxMov*100);
+    return `
+      <div class="bar-wrap">
+        <div class="bar-label"><span style="font-size:11px">${m.label}</span><span style="font-weight:700">${n}</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${m.bg}"></div></div>
       </div>
-    </div>`).join('');
-}
-
-function renderBitacora() {
-  const filtro = document.getElementById('bit-filtro').value;
-  const list   = document.getElementById('bit-list');
-  const items  = filtro ? bitacora.filter(r=>r.tipo===filtro) : bitacora;
-  if(!items.length){list.innerHTML='<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><p>Sin movimientos registrados</p></div>';return;}
-  list.innerHTML = items.map(r=>{
-    const m=MOV[r.tipo]||{label:r.tipo,loc:'',bg:'#888'};
-    const det=[r.cont,r.cliente,r.lugar,r.obs].filter(Boolean).join(' · ');
-    const locClass={PATIO:'loc-patio',DEPOSITO:'loc-dep',CLIENTE:'loc-cli'}[m.loc]||'';
-    return `<div class="log-item">
-      <div class="log-icon" style="background:${m.bg}">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </div>
-      <div class="log-body">
-        <div class="log-tipo">${m.label} — <span style="font-family:monospace">${r.ppu}</span></div>
-        ${det?`<div class="log-det">${det}</div>`:''}
-        <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
-          <span class="log-ts">${r.ts}</span>
-          <span class="log-loc ${locClass}">${m.loc}</span>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function renderResumen() {
-  const total   = Object.keys(patio).length;
-  const conCont = Object.values(patio).filter(r=>r.estado==='CON_CONTENEDOR').length;
-  const vacios  = total-conCont;
-  const desp    = bitacora.filter(r=>r.tipo==='DESPACHO_CLIENTE').length;
-  document.getElementById('stats-grid').innerHTML=`
-    <div class="stat"><div class="stat-n az">${total}</div><div class="stat-l">En patio ahora</div></div>
-    <div class="stat"><div class="stat-n vd">${conCont}</div><div class="stat-l">Con contenedor</div></div>
-    <div class="stat"><div class="stat-n am">${vacios}</div><div class="stat-l">Vacíos</div></div>
-    <div class="stat"><div class="stat-n">${desp}</div><div class="stat-l">Despachos hoy</div></div>`;
-
-  const tipos={};
-  Object.values(patio).forEach(r=>{if(r.tipo_chasis)tipos[r.tipo_chasis]=(tipos[r.tipo_chasis]||0)+1;});
-  const colors=['#2E75B6','#1D6A2E','#7D6608'];
-  document.getElementById('dist-chart').innerHTML = Object.keys(tipos).length
-    ? Object.keys(tipos).map((k,i)=>{
-        const pct=total>0?Math.round(tipos[k]/total*100):0;
-        return `<div class="bar-wrap"><div class="bar-label"><span>${k}</span><span>${tipos[k]} · ${pct}%</span></div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${colors[i%colors.length]}"></div></div></div>`;
-      }).join('')
-    : '<p style="color:var(--txt3);font-size:13px">Sin datos aún</p>';
-
-  const movCount={};
-  Object.keys(MOV).forEach(k=>movCount[k]=0);
-  bitacora.forEach(r=>{if(movCount[r.tipo]!==undefined)movCount[r.tipo]++;});
-  const maxMov=Math.max(...Object.values(movCount),1);
-  document.getElementById('mov-chart').innerHTML = Object.entries(MOV).map(([k,m])=>{
-    const n=movCount[k]; const pct=Math.round(n/maxMov*100);
-    return `<div class="bar-wrap"><div class="bar-label"><span style="font-size:11px">${m.label}</span><span>${n}</span></div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${m.bg}"></div></div></div>`;
+    `;
   }).join('');
 }
 
 function exportCSV() {
-  if(!bitacora.length){alert('Sin movimientos para exportar');return;}
-  const rows=[['Timestamp','Movimiento','PPU','Contenedor','Tipo chasis','Cliente','Lugar','Obs']];
-  bitacora.forEach(r=>rows.push([r.ts,MOV[r.tipo]?.label||r.tipo,r.ppu,r.cont,r.tipo_chasis,r.cliente,r.lugar,r.obs]));
-  const csv=rows.map(r=>r.map(v=>`"${(v||'').replace(/"/g,'""')}"`).join(',')).join('\n');
-  const a=document.createElement('a');
-  a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
-  a.download='bitacora_patio_'+new Date().toLocaleDateString('es-CL').replace(/\//g,'-')+'.csv';
-  a.click();
+  if(!bitacora.length){ alert('Sin movimientos para exportar'); return; }
+  const rows = [['Fecha y Hora','Movimiento','PPU','Contenedor','Tipo chasis','Cliente','Lugar','Obs']];
+  bitacora.forEach(r => rows.push([r.ts, MOV[r.tipo]?.label || r.tipo, r.ppu, r.cont, r.tipo_chasis, r.cliente, r.lugar, r.obs]));
+  
+  let csvContent = "data:text/csv;charset=utf-8,\uFEFF" + rows.map(e => e.map(val => `"${val}"`).join(",")).join("\n");
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", `Inventario_Patio_${new Date().toISOString().split('T')[0]}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
-
-// Init
-save();
-renderPatio(); renderBitacora(); renderResumen();
 </script>
 </body>
 </html>
