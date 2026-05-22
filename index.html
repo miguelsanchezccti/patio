@@ -61,6 +61,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Ar
 .cloud-status.syncing{color:var(--az2);display:block}
 .cloud-status.success{color:var(--vd);display:block}
 .cloud-status.error{color:var(--rj);display:block}
+.auto-badge{font-size:10px;color:var(--az2);font-weight:bold;margin-top:2px;display:block}
 </style>
 </head>
 <body>
@@ -90,7 +91,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Ar
       <div class="row-inputs">
         <div class="form-group">
           <label>Patente (PPU)</label>
-          <input type="text" id="inp-ppu" class="input-text" placeholder="ABCD12" style="text-transform:uppercase">
+          <input type="text" id="inp-ppu" class="input-text" placeholder="ABCD12" style="text-transform:uppercase" oninput="detectarChasis(this.value)">
         </div>
         <div class="form-group">
           <label>Contenedor / Chasis</label>
@@ -101,11 +102,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Ar
         <div class="form-group">
           <label>Tipo Chasis</label>
           <select id="inp-chasis">
-            <option value="Chasis 20' Normal" selected>Chasis 20' Normal</option>
-            <option value="Chasis 40' Normal">Chasis 40' Normal</option>
+            <option value="Chasis 20' Normal">Chasis 20' Normal</option>
+            <option value="Chasis 40' Normal" selected>Chasis 40' Normal</option>
             <option value="3 Ejes Multi">3 Ejes Multi</option>
             <option value="2 Ejes Multi">2 Ejes Multi</option>
           </select>
+          <span id="auto-lbl" class="auto-badge"></span>
         </div>
         <div class="form-group">
           <label>Cliente / Operador</label>
@@ -186,6 +188,24 @@ document.addEventListener('DOMContentLoaded', () => {
   actualizarGraficos();
 });
 
+// DETECTA AUTOMÁTICAMENTE EL TIPO DE CHASIS SEGÚN LA PATENTE
+function detectarChasis(valor) {
+  const ppu Clean = valor.trim().replace(/[^a-zA-Z]/g, ''); // Deja solo las letras
+  const numLetras = ppuClean.length;
+  const selectChasis = document.getElementById('inp-chasis');
+  const lblAuto = document.getElementById('auto-lbl');
+  
+  if (numLetras >= 3) {
+    selectChasis.value = "3 Ejes Multi";
+    lblAuto.innerText = "⚡ Auto-detectado: Patente nueva";
+  } else if (numLetras === 2) {
+    selectChasis.value = "Chasis 40' Normal";
+    lblAuto.innerText = "⚡ Auto-detectado: Patente clásica";
+  } else {
+    lblAuto.innerText = "";
+  }
+}
+
 function switchTab(tab) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -233,6 +253,7 @@ function registrarMovimiento() {
   document.getElementById('inp-cliente').value = '';
   document.getElementById('inp-lugar').value = '';
   document.getElementById('inp-obs').value = '';
+  document.getElementById('auto-lbl').innerText = '';
   selectedMov = null;
   document.querySelectorAll('.btn-mov').forEach(b => b.classList.remove('active'));
   
