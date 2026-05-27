@@ -20,19 +20,23 @@ const BASE_CHASIS_CCTI = {
   "HXHT28": "CORTINA", "HXHT29": "CORTINA", "HXHT30": "CORTINA", "HXFB13": "FURGON REEFER"
 };
 
+// Prefijos portuarios estandarizados para Maipú
 const PREFIJOS_NAVIERAS = {
-  "MSCU": "MSC", "MEDU": "MSC", "ONEU": "ONE", "MAEU": "MAERSK",
-  "SUDU": "HAMBURG SÜD", "COSU": "COSCO", "OOLU": "OOCL"
+  "MSCU": "MSC", "MEDU": "MSC",
+  "ONEU": "ONE",
+  "MAEU": "MAERSK",
+  "SUDU": "HAMBURG SÜD",
+  "COSU": "COSCO",
+  "OOLU": "OOCL"
 };
 
 let selectedMov = null;
 let bitacora = JSON.parse(localStorage.getItem('ccti_bitacora')) || [];
 
-// ROBUSTEZ: Recuperación de estado del inventario para evitar pérdidas por recarga de página
-let esInventarioActivo = localStorage.getItem('ccti_inv_activo') === 'true';
-let marcaTiempoInicioInv = localStorage.getItem('ccti_inv_inicio') ? new Date(localStorage.getItem('ccti_inv_inicio')) : null;
-let historialPatentesEnSesion = JSON.parse(localStorage.getItem('ccti_inv_patentes')) || []; 
-let ultimaUbicacionGuardada = localStorage.getItem('ccti_ultima_ub') || "";
+let esInventarioActivo = false;
+let marcaTiempoInicioInv = null;
+let historialPatentesEnSesion = []; 
+let ultimaUbicacionGuardada = ""; // Guarda memoria del último sector analizado
 
 document.addEventListener('DOMContentLoaded', () => {
   const opciones = document.querySelectorAll('.btn-mov');
@@ -55,15 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const opcionesFecha = { weekday: 'long', day: 'numeric', month: 'long' };
   document.getElementById('nav-date').innerHTML = "CCTI S.A. — " + d.toLocaleDateString('es-ES', opcionesFecha);
   
-  // Si había una sesión activa al recargar, restaurar la interfaz visual de inmediato
-  if (esInventarioActivo) {
-    restaurarInterfazInventario();
-  }
-
-  if (ultimaUbicacionGuardada) {
-    document.getElementById('inp-lugar').value = ultimaUbicacionGuardada;
-  }
-  
   actualizarGraficos();
 });
 
@@ -74,17 +69,17 @@ function detectarChasisMaster(valor) {
     return;
   }
   
-  // Limpieza en tiempo real de caracteres especiales
+  // ROBUSTEZ 1: Limpieza instantánea invisible de espacios y guiones intermedios
   const ppuClean = valor.replace(/[^a-zA-Z0-9]/g, '').trim().toUpperCase();
-  document.getElementById('inp-ppu').value = ppuClean;
+  document.getElementById('inp-ppu').value = ppuClean; // Modifica el cuadro visual sobre la marcha
 
   const selectChasis = document.getElementById('inp-chasis');
   const lblAuto = document.getElementById('auto-lbl');
 
-  // Validación preventiva: Alerta visual inmediata sin borrar el campo de golpe para no frustrar la escritura
   if (esInventarioActivo && historialPatentesEnSesion.includes(ppuClean)) {
-    lblAuto.innerText = `⚠️ DUPLICADO EN ESTA SESIÓN`;
-    lblAuto.style.color = "var(--rj)";
+    alert(`⚠️ REGISTRO DUPLICADO BLOQUEADO:\nLa patente ${ppuClean} ya fue ingresada durante la sesión de inventario en curso.`);
+    document.getElementById('inp-ppu').value = "";
+    lblAuto.innerText = "";
     return;
   }
 
@@ -94,29 +89,34 @@ function detectarChasisMaster(valor) {
     lblAuto.innerText = `⚡ Reconocido: ${chasisAsignado}`;
     lblAuto.style.color = "var(--vd)";
     
-    evaluarFlujoContenedorYNaviera(document.getElementById('inp-cont').value);
+    evaluarFlujoContenedorYNaviera(""); // Ejecuta validación inicial
   } else {
     lblAuto.innerText = "Patente Nueva / No en Maestro";
     lblAuto.style.color = "var(--txt3)";
   }
 }
 
+// ROBUSTEZ 2, 3 y NUEVA LÓGICA: Control automatizado de Estados y Navieras sin clics
 function evaluarFlujoContenedorYNaviera(valorContenedor) {
   const ppu = document.getElementById('inp-ppu').value.trim();
   const txtObs = document.getElementById('inp-obs');
   const inputCliente = document.getElementById('inp-cliente');
   const inputCont = document.getElementById('inp-cont');
 
+  // Limpieza rápida de la sigla eliminando caracteres raros
   let contClean = valorContenedor.replace(/[^a-zA-Z0-9]/g, '').trim().toUpperCase();
   inputCont.value = contClean;
 
   if (!ppu) return;
 
+  // Lógica: Si el campo contenedor está vacío -> DISPONIBLE
   if (contClean === "") {
     txtObs.value = "DISPONIBLE";
   } else {
+    // Si el campo contenedor tiene texto -> OCUPADO
     txtObs.value = "OCUPADO";
 
+    // Extrae las primeras 4 letras para saber qué Naviera es de manera inteligente
     if (contClean.length >= 4) {
       const prefijo = contClean.substring(0, 4);
       if (PREFIJOS_NAVIERAS[prefijo]) {
@@ -136,11 +136,11 @@ function gestionarSesionInventario(estado) {
     marcaTiempoInicioInv = new Date();
     historialPatentesEnSesion = [];
     
-    localStorage.setItem('ccti_inv_activo', 'true');
-    localStorage.setItem('ccti_inv_inicio', marcaTiempoInicioInv.toISOString());
-    localStorage.setItem('ccti_inv_patentes', JSON.stringify([]));
-    
-    restaurarInterfazInventario();
+    lblStatus.innerText = `⚠️ EN PROCESO — Iniciado a las: ${marcaTiempoInicioInv.toLocaleTimeString()}`;
+    lblStatus.style.background = "var(--or-l)";
+    lblStatus.style.color = "var(--or)";
+    btnStart.disabled = true;
+    btnStop.disabled = false;
   } 
   else if (estado === 'TERMINAR') {
     esInventarioActivo = false;
@@ -148,11 +148,6 @@ function gestionarSesionInventario(estado) {
     const difMs = finInv - marcaTiempoInicioInv;
     const mins = Math.floor(difMs / 60000);
     const segs = Math.floor((difMs % 60000) / 1000);
-
-    // Limpieza de estados de inventario en LocalStorage
-    localStorage.removeItem('ccti_inv_activo');
-    localStorage.removeItem('ccti_inv_inicio');
-    localStorage.removeItem('ccti_inv_patentes');
 
     lblStatus.innerText = "🟢 Estado: Esperando inicio de tandeo";
     lblStatus.style.background = "var(--gr)";
@@ -162,19 +157,6 @@ function gestionarSesionInventario(estado) {
 
     alert(`📋 Toma de Inventario Finalizada con Éxito.\n\n⏱️ Duración: ${mins} min ${segs} seg.\n🚚 Unidades Validadas en Patio: ${historialPatentesEnSesion.length}`);
   }
-}
-
-function restaurarInterfazInventario() {
-  const lblStatus = document.getElementById('inv-live-status');
-  const btnStart = document.getElementById('btn-start-inv');
-  const btnStop = document.getElementById('btn-stop-inv');
-  
-  const tiempoFormateado = marcaTiempoInicioInv ? new Date(marcaTiempoInicioInv).toLocaleTimeString() : '';
-  lblStatus.innerText = `⚠️ EN PROCESO — Iniciado a las: ${tiempoFormateado}`;
-  lblStatus.style.background = "var(--or-l)";
-  lblStatus.style.color = "var(--or)";
-  btnStart.disabled = true;
-  btnStop.disabled = false;
 }
 
 function switchTab(tab) {
@@ -189,7 +171,7 @@ function switchTab(tab) {
 }
 
 function registrarMovimiento() {
-  if(!selectedMov) { alert('Por favor, selecciona un tipo de movimiento primero.'); return; }
+  if(!selectedMov) { alert('Por favor, selecciona un tipo de movimiento'); return; }
   
   const ppu = document.getElementById('inp-ppu').value.trim().toUpperCase();
   const cont = document.getElementById('inp-cont').value.trim().toUpperCase();
@@ -198,25 +180,10 @@ function registrarMovimiento() {
   const lugar = document.getElementById('inp-lugar').value.trim();
   let obs = document.getElementById('inp-obs').value.trim();
   
-  // ROBUSTEZ: Validación de formato de Patente Chilena Estándar (4 letras + 2 números o 2 letras + 4 números)
-  const formatoPPU = /^[A-Z]{4}\d{2}$|^[A-Z]{2}\d{4}$/;
-  if(!ppu){ 
-    alert('La patente (PPU) es obligatoria.'); 
-    return; 
-  }
-  if(!formatoPPU.test(ppu)) {
-    alert('Formato de Patente Inválido.\nDebe ser formato nuevo (AAAA11) o antiguo (AA1111) sin guiones.');
-    return;
-  }
+  if(!ppu){ alert('La patente (PPU) es obligatoria'); return; }
   
-  // ROBUSTEZ: Obligar a seleccionar un tipo de chasis para resguardar la consistencia de la base de datos
-  if(!tipo_chasis) {
-    alert('Por favor, asigne un Tipo de Chasis a la unidad antes de guardar.');
-    return;
-  }
-
   if (esInventarioActivo && historialPatentesEnSesion.includes(ppu)) {
-    alert(`Error Crítico: La patente ${ppu} ya fue registrada como validada en esta ventana de inventario.`);
+    alert(`Error: La patente ${ppu} es un duplicado en esta ventana de inventario.`);
     return;
   }
 
@@ -228,7 +195,7 @@ function registrarMovimiento() {
     tipo: selectedMov,
     ppu: ppu,
     cont: cont || 'N/A',
-    tipo_chasis: tipo_chasis,
+    tipo_chasis: tipo_chasis || 'NO DEFINIDO',
     cliente: cliente || 'N/A',
     lugar: lugar || 'N/A',
     obs: obs || 'N/A'
@@ -236,18 +203,16 @@ function registrarMovimiento() {
   
   if (esInventarioActivo) {
     historialPatentesEnSesion.push(ppu);
-    localStorage.setItem('ccti_inv_patentes', JSON.stringify(historialPatentesEnSesion));
   }
 
+  // ROBUSTEZ 4: Guarda en memoria la ubicación para heredarla en el próximo registro
   ultimaUbicacionGuardada = lugar;
-  localStorage.setItem('ccti_ultima_ub', ultimaUbicacionGuardada);
 
   bitacora.unshift(registro);
   localStorage.setItem('ccti_bitacora', JSON.stringify(bitacora));
   
   enviarACloud(registro);
   
-  // Limpieza de campos post-registro exitoso
   document.getElementById('inp-ppu').value = '';
   document.getElementById('inp-cont').value = '';
   document.getElementById('inp-cliente').value = '';
@@ -255,6 +220,7 @@ function registrarMovimiento() {
   document.getElementById('auto-lbl').innerText = '';
   document.getElementById('inp-chasis').selectedIndex = 0;
   
+  // Rellena la ubicación automáticamente con el sector anterior para acelerar el tandeo
   document.getElementById('inp-lugar').value = ultimaUbicacionGuardada;
   
   selectedMov = null;
@@ -305,15 +271,15 @@ function actualizarGraficos() {
   let html = '';
   
   bitacora.forEach(r => {
-    if(r.tipo && r.tipo.startsWith('E')) ent++;
-    if(r.tipo && r.tipo.startsWith('S')) sal++;
+    if(r.tipo.startsWith('E')) ent++;
+    if(r.tipo.startsWith('S')) sal++;
     
     const labelMov = MOV[r.tipo]?.label || r.tipo;
     const borderCol = MOV[r.tipo]?.bg || '#888';
     
     html += `
       <div class="log-item" style="border-left-color:${borderCol}">
-        <span class="log-time">${r.ts ? r.ts.split(' ')[1] : ''}</span>
+        <span class="log-time">${r.ts.split(' ')[1] || ''}</span>
         <p>${labelMov} — 🚘 ${r.ppu}</p>
         <p>📦 Cont: ${r.cont} | 🛞 Chasis: ${r.tipo_chasis}</p>
         <p>🏢 Cli: ${r.cliente} | 📍 Pos: ${r.lugar}</p>
