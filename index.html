@@ -1,3 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Patio Control</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --az:#1F3864;--az2:#2E75B6;--az-l:#D6E4F0;
+  --vd:#1D6A2E;--vd-l:#E2EFDA;
+  --am:#7D6608;--am-l:#FFF2CC;
+  --rj:#9C0006;--rj-l:#FFE7E7;
+  --pu:#3A1F6B;--pu-l:#EDE7FF;
+  --or:#D35400;--or-l:#FEDBD0;
+  --gr:#F5F5F5;--gr2:#E0E0E0;
+  --txt:#1a1a1a;--txt2:#555;--txt3:#888;
+  --card:#fff;--bg:#F0F2F5;
+  --radius:12px;--shadow:0 2px 8px rgba(0,0,0,.1);
+}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--txt);line-height:1.4}
+.navbar{background:var(--az);color:#fff;padding:16px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow);text-align:center}
+.navbar h1{font-size:18px;font-weight:700;letter-spacing:.5px}
+.navbar p{font-size:12px;color:var(--az-l);margin-top:2px}
+.container{padding:16px;max-width:500px;margin:0 auto;padding-bottom:80px}
+.card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:16px;box-shadow:var(--shadow)}
+.card-title{font-size:14px;font-weight:700;color:var(--az);margin-bottom:12px;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.3px}
+.grid-mov{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.btn-mov{background:var(--gr);border:2px solid var(--gr2);border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer;transition:all .2s ease;display:flex;flex-direction:column;align-items:center;gap:4px}
+.btn-mov span:first-child{font-size:18px}.btn-mov span:last-child{font-size:11px;font-weight:600;color:var(--txt2)}
+.btn-mov.active[data-type="E_V"]{background:var(--vd-l);border-color:var(--vd);color:var(--vd)}
+.btn-mov.active[data-type="E_F"]{background:var(--vd-l);border-color:var(--vd);color:var(--vd)}
+.btn-mov.active[data-type="S_D"]{background:var(--am-l);border-color:var(--am);color:var(--am)}
+.btn-mov.active[data-type="S_C"]{background:var(--rj-l);border-color:var(--rj);color:var(--rj)}
+.btn-mov.active[data-type="INV"]{background:var(--or-l);border-color:var(--or);color:var(--or)}
+.form-group{margin-bottom:12px}.form-group label{display:block;font-size:11px;font-weight:700;color:var(--txt2);margin-bottom:4px;text-transform:uppercase}
+.input-text,select{width:100%;padding:11px;border:1.5px solid var(--gr2);border-radius:8px;font-size:14px;outline:none;background:#fff;transition:border-color .2s}
+.input-text:focus,select:focus{border-color:var(--az2)}
+.input-text::placeholder{color:var(--txt3);font-size:13px}
+.row-inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn-submit{width:100%;background:var(--az);color:#fff;border:none;border-radius:10px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(31,56,100,.3);transition:all .2s;margin-top:4px}
+.btn-submit:active{transform:scale(.98);box-shadow:none}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.stat-box{background:var(--gr);padding:12px;border-radius:10px;text-align:center;border:1px solid var(--gr2)}
+.stat-box p{font-size:10px;color:var(--txt2);font-weight:700;text-transform:uppercase}
+.stat-box h3{font-size:20px;color:var(--az);margin-top:2px;font-weight:800}
+.bar-chart{margin-top:8px}.bar-wrap{margin-bottom:8px}.bar-label{display:flex;justify-content:between;font-size:12px;margin-bottom:2px;font-weight:500;justify-content:space-between}
+.bar-track{background:var(--gr2);height:8px;border-radius:4px;overflow:hidden}.bar-fill{height:100%;border-radius:4px;transition:width .4s ease}
+.log-item{background:var(--gr);padding:10px;border-radius:8px;margin-bottom:8px;border-left:4px solid var(--gr2);font-size:12px;position:relative}
+.log-item p:first-child{font-weight:700;color:var(--txt);margin-bottom:2px}
+.log-item p:last-child{color:var(--txt2);font-size:11px}
+.log-time{position:absolute;top:10px;right:10px;font-size:10px;color:var(--txt3);font-weight:600}
+.btn-export{display:block;width:100%;background:var(--vd);color:#fff;text-align:center;padding:12px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;margin-top:8px}
+.tab-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;height:56px;display:flex;box-shadow:0 -2px 10px rgba(0,0,0,.05);z-index:100}
+.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--txt3);cursor:pointer;font-weight:600;font-size:11px;gap:2px}
+.tab-btn.active{color:var(--az)}
+.tab-btn span:first-child{font-size:18px}
+.view{display:none}.view.active{display:block}
+.cloud-status{text-align:center;font-size:11px;font-weight:600;margin-top:6px;display:none}
+.cloud-status.syncing{color:var(--az2);display:block}
+.cloud-status.success{color:var(--vd);display:block}
+.cloud-status.error{color:var(--rj);display:block}
+.auto-badge{font-size:10px;color:var(--az2);font-weight:bold;margin-top:2px;display:block}
+
+.inv-control-box{display:flex;gap:10px;margin-top:6px;margin-bottom:8px}
+.btn-inv-action{flex:1;padding:10px;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;color:white;transition:opacity 0.15s}
+.btn-inv-action:active{opacity:0.8}
+.btn-inv-action:disabled{background:#BDC3C7 !important;cursor:not-allowed;opacity:0.6}
+.status-badge-inv{font-size:11px;font-weight:700;color:var(--txt2);background:var(--gr);padding:8px;border-radius:6px;border:1px solid var(--gr2);text-align:center;margin-bottom:4px}
+</style>
+</head>
+<body>
+
+<div class="navbar">
+  <h1>PATIO CONTROL</h1>
+  <p id="nav-date">CCTI S.A. — Maipú</p>
+</div>
+
+<div class="container">
+  <div id="view-reg" class="view active">
+    <div class="card">
+      <div class="card-title">📥 Tipo de Movimiento</div>
+      <div class="grid-mov">
+        <div class="btn-mov" data-type="E_V"><span>🟢</span><span>Entrada Vacío</span></div>
+        <div class="btn-mov" data-type="E_F"><span>🔵</span><span>Entrada Full</span></div>
+        <div class="btn-mov" data-type="S_D"><span>🟡</span><span>Salida Depósito</span></div>
+        <div class="btn-mov" data-type="S_C"><span>🔴</span><span>Salida Cliente</span></div>
+      </div>
+      <div class="grid-mov" style="grid-template-columns:1fr;margin-bottom:0">
+        <div class="btn-mov" data-type="INV" id="btn-mode-inv"><span>📋</span><span>Inventario de Patio</span></div>
+      </div>
+    </div>
+
+    <div class="card" id="panel-cronometro-inv" style="display:none; border:2px solid var(--or)">
+      <div class="card-title" style="color:var(--or)">⏱️ Control de Sesión Inventario</div>
+      <div class="status-badge-inv" id="inv-live-status">Estado: Esperando inicio de tandeo</div>
+      <div class="inv-control-box">
+        <button class="btn-inv-action" id="btn-start-inv" onclick="gestionarSesionInventario('INICIAR')" style="background:var(--vd)">🚀 Iniciar</button>
+        <button class="btn-inv-action" id="btn-stop-inv" onclick="gestionarSesionInventario('TERMINAR')" style="background:var(--rj)" disabled>🛑 Terminar</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📝 Datos de la Unidad</div>
+      <div class="row-inputs">
+        <div class="form-group">
+          <label>Patente (PPU)</label>
+          <input type="text" id="inp-ppu" class="input-text" placeholder="ABCD12" style="text-transform:uppercase" oninput="detectarChasisMaster(this.value)">
+        </div>
+        <div class="form-group">
+          <label>Contenedor / Chasis</label>
+          <input type="text" id="inp-cont" class="input-text" placeholder="CSXU1234567" style="text-transform:uppercase" oninput="evaluarFlujoContenedorYNaviera(this.value)">
+        </div>
+      </div>
+      <div class="row-inputs">
+        <div class="form-group">
+          <label>Tipo Chasis</label>
+          <select id="inp-chasis">
+            <option value="" disabled selected>Seleccione Tipo...</option>
+            <option value="CONTENEDORES 20'">Chasis 20' Normal</option>
+            <option value="CONTENEDORES 40'">Chasis 40' Normal</option>
+            <option value="CONTENEDORES 20' Y 40'">3 Ejes Multi (20/40)</option>
+            <option value="CORTINA">Cortina</option>
+            <option value="FURGON REEFER">Furgón Reefer</option>
+          </select>
+          <span id="auto-lbl" class="auto-badge"></span>
+        </div>
+        <div class="form-group">
+          <label>Cliente / Operador</label>
+          <input type="text" id="inp-cliente" class="input-text" placeholder="Ej: MSC / Medlog">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Ubicación en Patio</label>
+        <input type="text" id="inp-lugar" class="input-text" placeholder="Ej: Sector A-3 / Taller">
+      </div>
+      
+      <div class="form-group">
+        <label>Observaciones</label>
+        <input type="text" id="inp-obs" class="input-text" placeholder="Ej: Daño en piña derecha, pendiente taller">
+      </div>
+      
+      <button class="btn-submit" onclick="registrarMovimiento()">Confirmar Movimiento</button>
+      <div id="cloud-msg" class="cloud-status"></div>
+    </div>
+  </div>
+
+  <div id="view-patio" class="view">
+    <div class="card">
+      <div class="card-title">📊 Balance de Turno</div>
+      <div class="stats-grid">
+        <div class="stat-box"><p>Total Entradas</p><h3 id="stat-ent">0</h3></div>
+        <div class="stat-box"><p>Total Salidas</p><h3 id="stat-sal">0</h3></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">📈 Resumen por Operación</div>
+      <div class="bar-chart" id="mov-chart"></div>
+    </div>
+  </div>
+
+  <div id="view-log" class="view">
+    <div class="card" style="padding:12px">
+      <div class="card-title" style="margin-bottom:8px">📋 Últimos Movimientos</div>
+      <div id="log-list" style="max-height:350px;overflow-y:auto;margin-bottom:8px"></div>
+      <button class="btn-export" onclick="exportCSV()">Descargar Respaldo CSV</button>
+    </div>
+  </div>
+</div>
+
+<div class="tab-bar">
+  <div class="tab-btn active" onclick="switchTab('reg')"><span>📝</span><span>Registrar</span></div>
+  <div class="tab-btn" onclick="switchTab('patio')"><span>📊</span><span>Resumen</span></div>
+  <div class="tab-btn" onclick="switchTab('log')"><span>📋</span><span>Bitácora</span></div>
+</div>
+
 <script>
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyaTb_uvazW60jXS7eX9Rbv33m9ry0EAZyZDaAnqiLj3yUAi-2uyz5uPn5ymvjGLRrTMw/exec";
 
@@ -20,7 +198,6 @@ const BASE_CHASIS_CCTI = {
   "HXHT28": "CORTINA", "HXHT29": "CORTINA", "HXHT30": "CORTINA", "HXFB13": "FURGON REEFER"
 };
 
-// Prefijos portuarios estandarizados para Maipú
 const PREFIJOS_NAVIERAS = {
   "MSCU": "MSC", "MEDU": "MSC",
   "ONEU": "ONE",
@@ -36,7 +213,7 @@ let bitacora = JSON.parse(localStorage.getItem('ccti_bitacora')) || [];
 let esInventarioActivo = false;
 let marcaTiempoInicioInv = null;
 let historialPatentesEnSesion = []; 
-let ultimaUbicacionGuardada = ""; // Guarda memoria del último sector analizado
+let ultimaUbicacionGuardada = "";
 
 document.addEventListener('DOMContentLoaded', () => {
   const opciones = document.querySelectorAll('.btn-mov');
@@ -69,9 +246,8 @@ function detectarChasisMaster(valor) {
     return;
   }
   
-  // ROBUSTEZ 1: Limpieza instantánea invisible de espacios y guiones intermedios
   const ppuClean = valor.replace(/[^a-zA-Z0-9]/g, '').trim().toUpperCase();
-  document.getElementById('inp-ppu').value = ppuClean; // Modifica el cuadro visual sobre la marcha
+  document.getElementById('inp-ppu').value = ppuClean;
 
   const selectChasis = document.getElementById('inp-chasis');
   const lblAuto = document.getElementById('auto-lbl');
@@ -89,34 +265,29 @@ function detectarChasisMaster(valor) {
     lblAuto.innerText = `⚡ Reconocido: ${chasisAsignado}`;
     lblAuto.style.color = "var(--vd)";
     
-    evaluarFlujoContenedorYNaviera(""); // Ejecuta validación inicial
+    evaluarFlujoContenedorYNaviera("");
   } else {
     lblAuto.innerText = "Patente Nueva / No en Maestro";
     lblAuto.style.color = "var(--txt3)";
   }
 }
 
-// ROBUSTEZ 2, 3 y NUEVA LÓGICA: Control automatizado de Estados y Navieras sin clics
 function evaluarFlujoContenedorYNaviera(valorContenedor) {
   const ppu = document.getElementById('inp-ppu').value.trim();
   const txtObs = document.getElementById('inp-obs');
   const inputCliente = document.getElementById('inp-cliente');
   const inputCont = document.getElementById('inp-cont');
 
-  // Limpieza rápida de la sigla eliminando caracteres raros
   let contClean = valorContenedor.replace(/[^a-zA-Z0-9]/g, '').trim().toUpperCase();
   inputCont.value = contClean;
 
   if (!ppu) return;
 
-  // Lógica: Si el campo contenedor está vacío -> DISPONIBLE
   if (contClean === "") {
     txtObs.value = "DISPONIBLE";
   } else {
-    // Si el campo contenedor tiene texto -> OCUPADO
     txtObs.value = "OCUPADO";
 
-    // Extrae las primeras 4 letras para saber qué Naviera es de manera inteligente
     if (contClean.length >= 4) {
       const prefijo = contClean.substring(0, 4);
       if (PREFIJOS_NAVIERAS[prefijo]) {
@@ -205,7 +376,6 @@ function registrarMovimiento() {
     historialPatentesEnSesion.push(ppu);
   }
 
-  // ROBUSTEZ 4: Guarda en memoria la ubicación para heredarla en el próximo registro
   ultimaUbicacionGuardada = lugar;
 
   bitacora.unshift(registro);
@@ -220,7 +390,6 @@ function registrarMovimiento() {
   document.getElementById('auto-lbl').innerText = '';
   document.getElementById('inp-chasis').selectedIndex = 0;
   
-  // Rellena la ubicación automáticamente con el sector anterior para acelerar el tandeo
   document.getElementById('inp-lugar').value = ultimaUbicacionGuardada;
   
   selectedMov = null;
@@ -322,3 +491,5 @@ function exportCSV() {
   document.body.removeChild(link);
 }
 </script>
+</body>
+</html>
