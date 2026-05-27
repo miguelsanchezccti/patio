@@ -1,495 +1,855 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Patio Control</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-:root{
-  --az:#1F3864;--az2:#2E75B6;--az-l:#D6E4F0;
-  --vd:#1D6A2E;--vd-l:#E2EFDA;
-  --am:#7D6608;--am-l:#FFF2CC;
-  --rj:#9C0006;--rj-l:#FFE7E7;
-  --pu:#3A1F6B;--pu-l:#EDE7FF;
-  --or:#D35400;--or-l:#FEDBD0;
-  --gr:#F5F5F5;--gr2:#E0E0E0;
-  --txt:#1a1a1a;--txt2:#555;--txt3:#888;
-  --card:#fff;--bg:#F0F2F5;
-  --radius:12px;--shadow:0 2px 8px rgba(0,0,0,.1);
-}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--txt);line-height:1.4}
-.navbar{background:var(--az);color:#fff;padding:16px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow);text-align:center}
-.navbar h1{font-size:18px;font-weight:700;letter-spacing:.5px}
-.navbar p{font-size:12px;color:var(--az-l);margin-top:2px}
-.container{padding:16px;max-width:500px;margin:0 auto;padding-bottom:80px}
-.card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:16px;box-shadow:var(--shadow)}
-.card-title{font-size:14px;font-weight:700;color:var(--az);margin-bottom:12px;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.3px}
-.grid-mov{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.btn-mov{background:var(--gr);border:2px solid var(--gr2);border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer;transition:all .2s ease;display:flex;flex-direction:column;align-items:center;gap:4px}
-.btn-mov span:first-child{font-size:18px}.btn-mov span:last-child{font-size:11px;font-weight:600;color:var(--txt2)}
-.btn-mov.active[data-type="E_V"]{background:var(--vd-l);border-color:var(--vd);color:var(--vd)}
-.btn-mov.active[data-type="E_F"]{background:var(--vd-l);border-color:var(--vd);color:var(--vd)}
-.btn-mov.active[data-type="S_D"]{background:var(--am-l);border-color:var(--am);color:var(--am)}
-.btn-mov.active[data-type="S_C"]{background:var(--rj-l);border-color:var(--rj);color:var(--rj)}
-.btn-mov.active[data-type="INV"]{background:var(--or-l);border-color:var(--or);color:var(--or)}
-.form-group{margin-bottom:12px}.form-group label{display:block;font-size:11px;font-weight:700;color:var(--txt2);margin-bottom:4px;text-transform:uppercase}
-.input-text,select{width:100%;padding:11px;border:1.5px solid var(--gr2);border-radius:8px;font-size:14px;outline:none;background:#fff;transition:border-color .2s}
-.input-text:focus,select:focus{border-color:var(--az2)}
-.input-text::placeholder{color:var(--txt3);font-size:13px}
-.row-inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.btn-submit{width:100%;background:var(--az);color:#fff;border:none;border-radius:10px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(31,56,100,.3);transition:all .2s;margin-top:4px}
-.btn-submit:active{transform:scale(.98);box-shadow:none}
-.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.stat-box{background:var(--gr);padding:12px;border-radius:10px;text-align:center;border:1px solid var(--gr2)}
-.stat-box p{font-size:10px;color:var(--txt2);font-weight:700;text-transform:uppercase}
-.stat-box h3{font-size:20px;color:var(--az);margin-top:2px;font-weight:800}
-.bar-chart{margin-top:8px}.bar-wrap{margin-bottom:8px}.bar-label{display:flex;justify-content:between;font-size:12px;margin-bottom:2px;font-weight:500;justify-content:space-between}
-.bar-track{background:var(--gr2);height:8px;border-radius:4px;overflow:hidden}.bar-fill{height:100%;border-radius:4px;transition:width .4s ease}
-.log-item{background:var(--gr);padding:10px;border-radius:8px;margin-bottom:8px;border-left:4px solid var(--gr2);font-size:12px;position:relative}
-.log-item p:first-child{font-weight:700;color:var(--txt);margin-bottom:2px}
-.log-item p:last-child{color:var(--txt2);font-size:11px}
-.log-time{position:absolute;top:10px;right:10px;font-size:10px;color:var(--txt3);font-weight:600}
-.btn-export{display:block;width:100%;background:var(--vd);color:#fff;text-align:center;padding:12px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;margin-top:8px}
-.tab-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;height:56px;display:flex;box-shadow:0 -2px 10px rgba(0,0,0,.05);z-index:100}
-.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--txt3);cursor:pointer;font-weight:600;font-size:11px;gap:2px}
-.tab-btn.active{color:var(--az)}
-.tab-btn span:first-child{font-size:18px}
-.view{display:none}.view.active{display:block}
-.cloud-status{text-align:center;font-size:11px;font-weight:600;margin-top:6px;display:none}
-.cloud-status.syncing{color:var(--az2);display:block}
-.cloud-status.success{color:var(--vd);display:block}
-.cloud-status.error{color:var(--rj);display:block}
-.auto-badge{font-size:10px;color:var(--az2);font-weight:bold;margin-top:2px;display:block}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Patio Control</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-.inv-control-box{display:flex;gap:10px;margin-top:6px;margin-bottom:8px}
-.btn-inv-action{flex:1;padding:10px;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;color:white;transition:opacity 0.15s}
-.btn-inv-action:active{opacity:0.8}
-.btn-inv-action:disabled{background:#BDC3C7 !important;cursor:not-allowed;opacity:0.6}
-.status-badge-inv{font-size:11px;font-weight:700;color:var(--txt2);background:var(--gr);padding:8px;border-radius:6px;border:1px solid var(--gr2);text-align:center;margin-bottom:4px}
-</style>
+    :root {
+      --az: #1F3864;
+      --az2: #2E75B6;
+      --az-l: #D6E4F0;
+      --vd: #1D6A2E;
+      --vd-l: #E2EFDA;
+      --am: #7D6608;
+      --am-l: #FFF2CC;
+      --rj: #9C0006;
+      --rj-l: #FFE7E7;
+      --pu: #3A1F6B;
+      --pu-l: #EDE7FF;
+      --or: #D35400;
+      --or-l: #FEDBD0;
+      --gr: #F5F5F5;
+      --gr2: #E0E0E0;
+      --txt: #1a1a1a;
+      --txt2: #555;
+      --txt3: #888;
+      --card: #fff;
+      --bg: #F0F2F5;
+      --radius: 12px;
+      --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--txt);
+      line-height: 1.4;
+    }
+
+    /* ── Navbar ── */
+    .navbar {
+      background: var(--az);
+      color: #fff;
+      padding: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .navbar h1 {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .navbar p {
+      font-size: 12px;
+      color: var(--az-l);
+      margin-top: 2px;
+    }
+
+    /* ── Layout ── */
+    .container {
+      padding: 16px;
+      max-width: 500px;
+      margin: 0 auto;
+      padding-bottom: 80px;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--az);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    /* ── Movement buttons ── */
+    .grid-mov {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .btn-mov {
+      background: var(--gr);
+      border: 2px solid var(--gr2);
+      border-radius: 10px;
+      padding: 12px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-mov span:first-child  { font-size: 18px; }
+    .btn-mov span:last-child   { font-size: 11px; font-weight: 600; color: var(--txt2); }
+
+    .btn-mov.active[data-type="E_V"] { background: var(--vd-l); border-color: var(--vd); color: var(--vd); }
+    .btn-mov.active[data-type="E_F"] { background: var(--vd-l); border-color: var(--vd); color: var(--vd); }
+    .btn-mov.active[data-type="S_D"] { background: var(--am-l); border-color: var(--am); color: var(--am); }
+    .btn-mov.active[data-type="S_C"] { background: var(--rj-l); border-color: var(--rj); color: var(--rj); }
+    .btn-mov.active[data-type="INV"] { background: var(--or-l); border-color: var(--or); color: var(--or); }
+
+    /* ── Form ── */
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--txt2);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .input-text,
+    select {
+      width: 100%;
+      padding: 11px;
+      border: 1.5px solid var(--gr2);
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      background: #fff;
+      transition: border-color 0.2s;
+    }
+
+    .input-text:focus,
+    select:focus { border-color: var(--az2); }
+
+    .input-text::placeholder {
+      color: var(--txt3);
+      font-size: 13px;
+    }
+
+    .row-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .auto-badge {
+      font-size: 10px;
+      color: var(--az2);
+      font-weight: bold;
+      margin-top: 2px;
+      display: block;
+    }
+
+    /* ── Submit ── */
+    .btn-submit {
+      width: 100%;
+      background: var(--az);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(31, 56, 100, 0.3);
+      transition: all 0.2s;
+      margin-top: 4px;
+    }
+
+    .btn-submit:active {
+      transform: scale(0.98);
+      box-shadow: none;
+    }
+
+    /* ── Stats ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .stat-box {
+      background: var(--gr);
+      padding: 12px;
+      border-radius: 10px;
+      text-align: center;
+      border: 1px solid var(--gr2);
+    }
+
+    .stat-box p  { font-size: 10px; color: var(--txt2); font-weight: 700; text-transform: uppercase; }
+    .stat-box h3 { font-size: 20px; color: var(--az); margin-top: 2px; font-weight: 800; }
+
+    /* ── Bar chart ── */
+    .bar-chart   { margin-top: 8px; }
+    .bar-wrap    { margin-bottom: 8px; }
+
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 2px;
+      font-weight: 500;
+    }
+
+    .bar-track {
+      background: var(--gr2);
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
+    /* ── Log ── */
+    .log-item {
+      background: var(--gr);
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      border-left: 4px solid var(--gr2);
+      font-size: 12px;
+      position: relative;
+    }
+
+    .log-item p:first-child { font-weight: 700; color: var(--txt); margin-bottom: 2px; }
+    .log-item p:last-child  { color: var(--txt2); font-size: 11px; }
+
+    .log-time {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 10px;
+      color: var(--txt3);
+      font-weight: 600;
+    }
+
+    /* ── Export ── */
+    .btn-export {
+      display: block;
+      width: 100%;
+      background: var(--vd);
+      color: #fff;
+      text-align: center;
+      padding: 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 8px;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* ── Tab bar ── */
+    .tab-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      height: 56px;
+      display: flex;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+      z-index: 100;
+    }
+
+    .tab-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--txt3);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 11px;
+      gap: 2px;
+    }
+
+    .tab-btn.active          { color: var(--az); }
+    .tab-btn span:first-child { font-size: 18px; }
+
+    /* ── Views ── */
+    .view        { display: none; }
+    .view.active { display: block; }
+
+    /* ── Cloud sync status ── */
+    .cloud-status          { text-align: center; font-size: 11px; font-weight: 600; margin-top: 6px; display: none; }
+    .cloud-status.syncing  { color: var(--az2); display: block; }
+    .cloud-status.success  { color: var(--vd);  display: block; }
+    .cloud-status.error    { color: var(--rj);  display: block; }
+
+    /* ── Inventory session panel ── */
+    .inv-control-box {
+      display: flex;
+      gap: 10px;
+      margin-top: 6px;
+      margin-bottom: 8px;
+    }
+
+    .btn-inv-action {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      color: white;
+      transition: opacity 0.15s;
+    }
+
+    .btn-inv-action:active   { opacity: 0.8; }
+    .btn-inv-action:disabled { background: #BDC3C7 !important; cursor: not-allowed; opacity: 0.6; }
+
+    .status-badge-inv {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--txt2);
+      background: var(--gr);
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid var(--gr2);
+      text-align: center;
+      margin-bottom: 4px;
+    }
+  </style>
 </head>
 <body>
 
-<div class="navbar">
-  <h1>PATIO CONTROL</h1>
-  <p id="nav-date">CCTI S.A. — Maipú</p>
-</div>
-
-<div class="container">
-  <div id="view-reg" class="view active">
-    <div class="card">
-      <div class="card-title">📥 Tipo de Movimiento</div>
-      <div class="grid-mov">
-        <div class="btn-mov" data-type="E_V"><span>🟢</span><span>Entrada Vacío</span></div>
-        <div class="btn-mov" data-type="E_F"><span>🔵</span><span>Entrada Full</span></div>
-        <div class="btn-mov" data-type="S_D"><span>🟡</span><span>Salida Depósito</span></div>
-        <div class="btn-mov" data-type="S_C"><span>🔴</span><span>Salida Cliente</span></div>
-      </div>
-      <div class="grid-mov" style="grid-template-columns:1fr;margin-bottom:0">
-        <div class="btn-mov" data-type="INV" id="btn-mode-inv"><span>📋</span><span>Inventario de Patio</span></div>
-      </div>
-    </div>
-
-    <div class="card" id="panel-cronometro-inv" style="display:none; border:2px solid var(--or)">
-      <div class="card-title" style="color:var(--or)">⏱️ Control de Sesión Inventario</div>
-      <div class="status-badge-inv" id="inv-live-status">Estado: Esperando inicio de tandeo</div>
-      <div class="inv-control-box">
-        <button class="btn-inv-action" id="btn-start-inv" onclick="gestionarSesionInventario('INICIAR')" style="background:var(--vd)">🚀 Iniciar</button>
-        <button class="btn-inv-action" id="btn-stop-inv" onclick="gestionarSesionInventario('TERMINAR')" style="background:var(--rj)" disabled>🛑 Terminar</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">📝 Datos de la Unidad</div>
-      <div class="row-inputs">
-        <div class="form-group">
-          <label>Patente (PPU)</label>
-          <input type="text" id="inp-ppu" class="input-text" placeholder="ABCD12" style="text-transform:uppercase" oninput="detectarChasisMaster(this.value)">
-        </div>
-        <div class="form-group">
-          <label>Contenedor / Chasis</label>
-          <input type="text" id="inp-cont" class="input-text" placeholder="CSXU1234567" style="text-transform:uppercase" oninput="evaluarFlujoContenedorYNaviera(this.value)">
-        </div>
-      </div>
-      <div class="row-inputs">
-        <div class="form-group">
-          <label>Tipo Chasis</label>
-          <select id="inp-chasis">
-            <option value="" disabled selected>Seleccione Tipo...</option>
-            <option value="CONTENEDORES 20'">Chasis 20' Normal</option>
-            <option value="CONTENEDORES 40'">Chasis 40' Normal</option>
-            <option value="CONTENEDORES 20' Y 40'">3 Ejes Multi (20/40)</option>
-            <option value="CORTINA">Cortina</option>
-            <option value="FURGON REEFER">Furgón Reefer</option>
-          </select>
-          <span id="auto-lbl" class="auto-badge"></span>
-        </div>
-        <div class="form-group">
-          <label>Cliente / Operador</label>
-          <input type="text" id="inp-cliente" class="input-text" placeholder="Ej: MSC / Medlog">
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Ubicación en Patio</label>
-        <input type="text" id="inp-lugar" class="input-text" placeholder="Ej: Sector A-3 / Taller">
-      </div>
-      
-      <div class="form-group">
-        <label>Observaciones</label>
-        <input type="text" id="inp-obs" class="input-text" placeholder="Ej: Daño en piña derecha, pendiente taller">
-      </div>
-      
-      <button class="btn-submit" onclick="registrarMovimiento()">Confirmar Movimiento</button>
-      <div id="cloud-msg" class="cloud-status"></div>
-    </div>
+  <div class="navbar">
+    <h1>PATIO CONTROL</h1>
+    <p id="nav-date">CCTI S.A. — Maipú</p>
   </div>
 
-  <div id="view-patio" class="view">
-    <div class="card">
-      <div class="card-title">📊 Balance de Turno</div>
-      <div class="stats-grid">
-        <div class="stat-box"><p>Total Entradas</p><h3 id="stat-ent">0</h3></div>
-        <div class="stat-box"><p>Total Salidas</p><h3 id="stat-sal">0</h3></div>
+  <div class="container">
+
+    <div id="view-reg" class="view active">
+
+      <div class="card">
+        <div class="card-title">📥 Tipo de Movimiento</div>
+        <div class="grid-mov">
+          <div class="btn-mov" data-type="E_V"><span>🟢</span><span>Entrada Vacío</span></div>
+          <div class="btn-mov" data-type="E_F"><span>🔵</span><span>Entrada Full</span></div>
+          <div class="btn-mov" data-type="S_D"><span>🟡</span><span>Salida Depósito</span></div>
+          <div class="btn-mov" data-type="S_C"><span>🔴</span><span>Salida Cliente</span></div>
+        </div>
+        <div class="grid-mov" style="grid-template-columns: 1fr; margin-bottom: 0;">
+          <div class="btn-mov" data-type="INV" id="btn-mode-inv"><span>📋</span><span>Inventario de Patio</span></div>
+        </div>
+      </div>
+
+      <div class="card" id="panel-cronometro-inv" style="display: none; border: 2px solid var(--or);">
+        <div class="card-title" style="color: var(--or);">⏱️ Control de Sesión Inventario</div>
+        <div class="status-badge-inv" id="inv-live-status">Estado: Esperando inicio de tandeo</div>
+        <div class="inv-control-box">
+          <button class="btn-inv-action" id="btn-start-inv"
+                  onclick="gestionarSesionInventario('INICIAR')"
+                  style="background: var(--vd);">🚀 Iniciar</button>
+          <button class="btn-inv-action" id="btn-stop-inv"
+                  onclick="gestionarSesionInventario('TERMINAR')"
+                  style="background: var(--rj);" disabled>🛑 Terminar</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📝 Datos de la Unidad</div>
+
+        <div class="row-inputs">
+          <div class="form-group">
+            <label>Patente (PPU)</label>
+            <input type="text" id="inp-ppu" class="input-text" placeholder="ABCD12"
+                   style="text-transform: uppercase;"
+                   oninput="detectarChasisMaster(this.value)">
+          </div>
+          <div class="form-group">
+            <label>Contenedor / Chasis</label>
+            <input type="text" id="inp-cont" class="input-text" placeholder="CSXU1234567"
+                   style="text-transform: uppercase;"
+                   oninput="evaluarFlujoContenedorYNaviera(this.value)">
+          </div>
+        </div>
+
+        <div class="row-inputs">
+          <div class="form-group">
+            <label>Tipo Chasis</label>
+            <select id="inp-chasis">
+              <option value="" disabled selected>Seleccione Tipo...</option>
+              <option value="CONTENEDORES 20'">Chasis 20' Normal</option>
+              <option value="CONTENEDORES 40'">Chasis 40' Normal</option>
+              <option value="CONTENEDORES 20' Y 40'">3 Ejes Multi (20/40)</option>
+              <option value="CORTINA">Cortina</option>
+              <option value="FURGON REEFER">Furgón Reefer</option>
+            </select>
+            <span id="auto-lbl" class="auto-badge"></span>
+          </div>
+          <div class="form-group">
+            <label>Cliente / Operador</label>
+            <input type="text" id="inp-cliente" class="input-text" placeholder="Ej: MSC / Medlog">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Ubicación en Patio</label>
+          <input type="text" id="inp-lugar" class="input-text" placeholder="Ej: Sector A-3 / Taller">
+        </div>
+
+        <div class="form-group">
+          <label>Observaciones</label>
+          <input type="text" id="inp-obs" class="input-text"
+                 placeholder="Ej: Daño en piña derecha, pendiente taller">
+        </div>
+
+        <button class="btn-submit" onclick="registrarMovimiento()">Confirmar Movimiento</button>
+        <div id="cloud-msg" class="cloud-status"></div>
       </div>
     </div>
-    <div class="card">
-      <div class="card-title">📈 Resumen por Operación</div>
-      <div class="bar-chart" id="mov-chart"></div>
+
+    <div id="view-patio" class="view">
+      <div class="card">
+        <div class="card-title">📊 Balance de Turno</div>
+        <div class="stats-grid">
+          <div class="stat-box"><p>Total Entradas</p><h3 id="stat-ent">0</h3></div>
+          <div class="stat-box"><p>Total Salidas</p><h3 id="stat-sal">0</h3></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">📈 Resumen por Operación</div>
+        <div class="bar-chart" id="mov-chart"></div>
+      </div>
     </div>
+
+    <div id="view-log" class="view">
+      <div class="card" style="padding: 12px;">
+        <div class="card-title" style="margin-bottom: 8px;">📋 Últimos Movimientos</div>
+        <div id="log-list" style="max-height: 350px; overflow-y: auto; margin-bottom: 8px;"></div>
+        <button class="btn-export" onclick="exportCSV()">Descargar Respaldo CSV</button>
+      </div>
+    </div>
+
   </div>
 
-  <div id="view-log" class="view">
-    <div class="card" style="padding:12px">
-      <div class="card-title" style="margin-bottom:8px">📋 Últimos Movimientos</div>
-      <div id="log-list" style="max-height:350px;overflow-y:auto;margin-bottom:8px"></div>
-      <button class="btn-export" onclick="exportCSV()">Descargar Respaldo CSV</button>
-    </div>
+  <div class="tab-bar">
+    <div class="tab-btn active" onclick="switchTab('reg')"><span>📝</span><span>Registrar</span></div>
+    <div class="tab-btn" onclick="switchTab('patio')"><span>📊</span><span>Resumen</span></div>
+    <div class="tab-btn" onclick="switchTab('log')"><span>📋</span><span>Bitácora</span></div>
   </div>
-</div>
 
-<div class="tab-bar">
-  <div class="tab-btn active" onclick="switchTab('reg')"><span>📝</span><span>Registrar</span></div>
-  <div class="tab-btn" onclick="switchTab('patio')"><span>📊</span><span>Resumen</span></div>
-  <div class="tab-btn" onclick="switchTab('log')"><span>📋</span><span>Bitácora</span></div>
-</div>
+  <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyaTb_uvazW60jXS7eX9Rbv33m9ry0EAZyZDaAnqiLj3yUAi-2uyz5uPn5ymvjGLRrTMw/exec";
 
-<script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyaTb_uvazW60jXS7eX9Rbv33m9ry0EAZyZDaAnqiLj3yUAi-2uyz5uPn5ymvjGLRrTMw/exec";
+    const MOV = {
+      E_V: { label: "Entrada Vacío",    bg: "var(--vd)", border: "var(--vd)" },
+      E_F: { label: "Entrada Full",     bg: "var(--vd)", border: "var(--vd)" },
+      S_D: { label: "Salida Depósito",  bg: "var(--am)", border: "var(--am)" },
+      S_C: { label: "Salida Cliente",   bg: "var(--rj)", border: "var(--rj)" },
+      INV: { label: "Inventario Patio", bg: "var(--or)", border: "var(--or)" },
+    };
 
-const MOV = {
-  'E_V': { label: 'Entrada Vacío', bg: 'var(--vd)', border: 'var(--vd)' },
-  'E_F': { label: 'Entrada Full', bg: 'var(--vd)', border: 'var(--vd)' },
-  'S_D': { label: 'Salida Depósito', bg: 'var(--am)', border: 'var(--am)' },
-  'S_C': { label: 'Salida Cliente', bg: 'var(--rj)', border: 'var(--rj)' },
-  'INV': { label: 'Inventario Patio', bg: 'var(--or)', border: 'var(--or)' }
-};
+    const BASE_CHASIS_CCTI = {
+      "JK2591": "CONTENEDORES 20'",
+      "GRDY34": "CONTENEDORES 40'",
+      "GRDY35": "CONTENEDORES 40'",
+      "GRDY36": "CONTENEDORES 40'",
+      "GRDY37": "CONTENEDORES 40'",
+      "GRDY38": "CONTENEDORES 40'",
+      "GRDY39": "CONTENEDORES 40'",
+      "PXKS67": "CONTENEDORES 20' Y 40'",
+      "PXKS76": "CONTENEDORES 20' Y 40'",
+      "PXKS86": "CONTENEDORES 20' Y 40'",
+      "PXKS96": "CONTENEDORES 20' Y 40'",
+      "PXKT10": "CONTENEDORES 20' Y 40'",
+      "HXHB32": "CORTINA",
+      "KYPR97": "CORTINA",
+      "PWYL65": "CORTINA",
+      "PWYL67": "CORTINA",
+      "PWYL68": "CORTINA",
+      "PWYL69": "CORTINA",
+      "PWYL70": "CORTINA",
+      "PWYL72": "CORTINA",
+      "HXHT27": "CORTINA",
+      "HXHT28": "CORTINA",
+      "HXHT29": "CORTINA",
+      "HXHT30": "CORTINA",
+      "HXFB13": "FURGON REEFER",
+    };
 
-const BASE_CHASIS_CCTI = {
-  "JK2591": "CONTENEDORES 20'",
-  "GRDY34": "CONTENEDORES 40'", "GRDY35": "CONTENEDORES 40'", "GRDY36": "CONTENEDORES 40'",
-  "GRDY37": "CONTENEDORES 40'", "GRDY38": "CONTENEDORES 40'", "GRDY39": "CONTENEDORES 40'",
-  "PXKS67": "CONTENEDORES 20' Y 40'", "PXKS76": "CONTENEDORES 20' Y 40'", "PXKS86": "CONTENEDORES 20' Y 40'", 
-  "PXKS96": "CONTENEDORES 20' Y 40'", "PXKT10": "CONTENEDORES 20' Y 40'", "HXHB32": "CORTINA", 
-  "KYPR97": "CORTINA", "PWYL65": "CORTINA", "PWYL67": "CORTINA", "PWYL68": "CORTINA",
-  "PWYL69": "CORTINA", "PWYL70": "CORTINA", "PWYL72": "CORTINA", "HXHT27": "CORTINA",
-  "HXHT28": "CORTINA", "HXHT29": "CORTINA", "HXHT30": "CORTINA", "HXFB13": "FURGON REEFER"
-};
+    const PREFIJOS_NAVIERAS = {
+      MSCU: "MSC", MEDU: "MSC", ONEU: "ONE", MAEU: "MAERSK",
+      SUDU: "HAMBURG SÜD", COSU: "COSCO", OOLU: "OOCL",
+    };
 
-const PREFIJOS_NAVIERAS = {
-  "MSCU": "MSC", "MEDU": "MSC",
-  "ONEU": "ONE",
-  "MAEU": "MAERSK",
-  "SUDU": "HAMBURG SÜD",
-  "COSU": "COSCO",
-  "OOLU": "OOCL"
-};
-
-let selectedMov = null;
-let bitacora = JSON.parse(localStorage.getItem('ccti_bitacora')) || [];
-
-let esInventarioActivo = false;
-let marcaTiempoInicioInv = null;
-let historialPatentesEnSesion = []; 
-let ultimaUbicacionGuardada = "";
-
-document.addEventListener('DOMContentLoaded', () => {
-  const opciones = document.querySelectorAll('.btn-mov');
-  opciones.forEach(btn => {
-    btn.addEventListener('click', () => {
-      opciones.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      selectedMov = btn.getAttribute('data-type');
-      
-      const panelCronometro = document.getElementById('panel-cronometro-inv');
-      if (selectedMov === 'INV') {
-        panelCronometro.style.display = 'block';
-      } else {
-        panelCronometro.style.display = 'none';
-      }
-    });
-  });
-  
-  const d = new Date();
-  const opcionesFecha = { weekday: 'long', day: 'numeric', month: 'long' };
-  document.getElementById('nav-date').innerHTML = "CCTI S.A. — " + d.toLocaleDateString('es-ES', opcionesFecha);
-  
-  actualizarGraficos();
-});
-
-function detectarChasisMaster(valor) {
-  if (!valor) {
-    document.getElementById('auto-lbl').innerText = "";
-    document.getElementById('inp-obs').value = "";
-    return;
-  }
-  
-  const ppuClean = valor.replace(/[^a-zA-Z0-9]/g, '').trim().toUpperCase();
-  document.getElementById('inp-ppu').value = ppuClean;
-
-  const selectChasis = document.getElementById('inp-chasis');
-  const lblAuto = document.getElementById('auto-lbl');
-
-  if (esInventarioActivo && historialPatentesEnSesion.includes(ppuClean)) {
-    alert(`⚠️ REGISTRO DUPLICADO BLOQUEADO:\nLa patente ${ppuClean} ya fue ingresada durante la sesión de inventario en curso.`);
-    document.getElementById('inp-ppu').value = "";
-    lblAuto.innerText = "";
-    return;
-  }
-
-  if (BASE_CHASIS_CCTI[ppuClean]) {
-    const chasisAsignado = BASE_CHASIS_CCTI[ppuClean];
-    selectChasis.value = chasisAsignado;
-    lblAuto.innerText = `⚡ Reconocido: ${chasisAsignado}`;
-    lblAuto.style.color = "var(--vd)";
+    let selectedMov = null;
+    let bitacora = JSON.parse(localStorage.getItem("ccti_bitacora")) || [];
     
-    evaluarFlujoContenedorYNaviera("");
-  } else {
-    lblAuto.innerText = "Patente Nueva / No en Maestro";
-    lblAuto.style.color = "var(--txt3)";
-  }
-}
+    // MEJORA SEGUIDAD: Persistir datos críticos de tandeo en LocalStorage para resistir recargas accidentales
+    let esInventarioActivo = localStorage.getItem("ccti_inv_activo") === "true";
+    let marcaTiempoInicioInv = localStorage.getItem("ccti_inv_inicio") ? new Date(localStorage.getItem("ccti_inv_inicio")) : null;
+    let historialPatentesEnSesion = JSON.parse(localStorage.getItem("ccti_inv_patentes")) || [];
+    let ultimaUbicacionGuardada = localStorage.getItem("ccti_ultima_ub") || "";
 
-function evaluarFlujoContenedorYNaviera(valorContenedor) {
-  const ppu = document.getElementById('inp-ppu').value.trim();
-  const txtObs = document.getElementById('inp-obs');
-  const inputCliente = document.getElementById('inp-cliente');
-  const inputCont = document.getElementById('inp-cont');
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".btn-mov").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".btn-mov").forEach((b) => b.classList.remove("active"));
+          btn.classList.add('active');
+          selectedMov = btn.getAttribute("data-type");
 
-  let contClean = valorContenedor.replace(/[^a-zA-Z0-9]/g, '').trim().toUpperCase();
-  inputCont.value = contClean;
+          const panelCronometro = document.getElementById("panel-cronometro-inv");
+          panelCronometro.style.display = selectedMov === "INV" ? "block" : "none";
+        });
+      });
 
-  if (!ppu) return;
+      const d = new Date();
+      const opcionesFecha = { weekday: "long", day: "numeric", month: "long" };
+      document.getElementById("nav-date").innerHTML = "CCTI S.A. — " + d.toLocaleDateString("es-ES", opcionesFecha);
 
-  if (contClean === "") {
-    txtObs.value = "DISPONIBLE";
-  } else {
-    txtObs.value = "OCUPADO";
+      // Si había un inventario corriendo antes del refresh, restaurar la interfaz al tiro
+      if (esInventarioActivo && marcaTiempoInicioInv) {
+        restaurarInterfazInventario();
+      }
 
-    if (contClean.length >= 4) {
-      const prefijo = contClean.substring(0, 4);
-      if (PREFIJOS_NAVIERAS[prefijo]) {
-        inputCliente.value = PREFIJOS_NAVIERAS[prefijo];
+      if (ultimaUbicacionGuardada) {
+        document.getElementById("inp-lugar").value = ultimaUbicacionGuardada;
+      }
+
+      actualizarGraficos();
+    });
+
+    function detectarChasisMaster(valor) {
+      if (!valor) {
+        document.getElementById("auto-lbl").innerText = "";
+        document.getElementById("inp-obs").value = "";
+        return;
+      }
+
+      const ppuClean = valor.replace(/[^a-zA-Z0-9]/g, "").trim().toUpperCase();
+      document.getElementById("inp-ppu").value = ppuClean;
+
+      const selectChasis = document.getElementById("inp-chasis");
+      const lblAuto = document.getElementById("auto-lbl");
+
+      if (esInventarioActivo && historialPatentesEnSesion.includes(ppuClean)) {
+        alert(`⚠️ REGISTRO DUPLICADO BLOQUEADO:\nLa patente ${ppuClean} ya fue ingresada durante la sesión de inventario en curso.`);
+        document.getElementById("inp-ppu").value = "";
+        lblAuto.innerText = "";
+        return;
+      }
+
+      if (BASE_CHASIS_CCTI[ppuClean]) {
+        const chasisAsignado = BASE_CHASIS_CCTI[ppuClean];
+        selectChasis.value = chasisAsignado;
+        lblAuto.innerText = `⚡ Reconocido: ${chasisAsignado}`;
+        lblAuto.style.color = "var(--vd)";
+        evaluarFlujoContenedorYNaviera(document.getElementById("inp-cont").value);
+      } else {
+        lblAuto.innerText = "Patente Nueva / No en Maestro";
+        lblAuto.style.color = "var(--txt3)";
       }
     }
-  }
-}
 
-function gestionarSesionInventario(estado) {
-  const lblStatus = document.getElementById('inv-live-status');
-  const btnStart = document.getElementById('btn-start-inv');
-  const btnStop = document.getElementById('btn-stop-inv');
+    function evaluarFlujoContenedorYNaviera(valorContenedor) {
+      const ppu = document.getElementById("inp-ppu").value.trim();
+      const txtObs = document.getElementById("inp-obs");
+      const inputCliente = document.getElementById("inp-cliente");
+      const inputCont = document.getElementById("inp-cont");
 
-  if (estado === 'INICIAR') {
-    esInventarioActivo = true;
-    marcaTiempoInicioInv = new Date();
-    historialPatentesEnSesion = [];
-    
-    lblStatus.innerText = `⚠️ EN PROCESO — Iniciado a las: ${marcaTiempoInicioInv.toLocaleTimeString()}`;
-    lblStatus.style.background = "var(--or-l)";
-    lblStatus.style.color = "var(--or)";
-    btnStart.disabled = true;
-    btnStop.disabled = false;
-  } 
-  else if (estado === 'TERMINAR') {
-    esInventarioActivo = false;
-    const finInv = new Date();
-    const difMs = finInv - marcaTiempoInicioInv;
-    const mins = Math.floor(difMs / 60000);
-    const segs = Math.floor((difMs % 60000) / 1000);
+      const contClean = valorContenedor.replace(/[^a-zA-Z0-9]/g, "").trim().toUpperCase();
+      inputCont.value = contClean;
 
-    lblStatus.innerText = "🟢 Estado: Esperando inicio de tandeo";
-    lblStatus.style.background = "var(--gr)";
-    lblStatus.style.color = "var(--txt2)";
-    btnStart.disabled = false;
-    btnStop.disabled = true;
+      if (!ppu) return;
 
-    alert(`📋 Toma de Inventario Finalizada con Éxito.\n\n⏱️ Duración: ${mins} min ${segs} seg.\n🚚 Unidades Validadas en Patio: ${historialPatentesEnSesion.length}`);
-  }
-}
+      if (contClean === "") {
+        txtObs.value = "DISPONIBLE";
+      } else {
+        txtObs.value = "OCUPADO";
 
-function switchTab(tab) {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  
-  const idx = ['reg', 'patio', 'log'].indexOf(tab);
-  document.querySelectorAll('.tab-btn')[idx].classList.add('active');
-  document.getElementById('view-' + tab).classList.add('active');
-  
-  if(tab === 'patio' || tab === 'log') actualizarGraficos();
-}
+        if (contClean.length >= 4) {
+          const prefijo = contClean.substring(0, 4);
+          if (PREFIJOS_NAVIERAS[prefijo]) {
+            inputCliente.value = PREFIJOS_NAVIERAS[prefijo];
+          }
+        }
+      }
+    }
 
-function registrarMovimiento() {
-  if(!selectedMov) { alert('Por favor, selecciona un tipo de movimiento'); return; }
-  
-  const ppu = document.getElementById('inp-ppu').value.trim().toUpperCase();
-  const cont = document.getElementById('inp-cont').value.trim().toUpperCase();
-  const tipo_chasis = document.getElementById('inp-chasis').value;
-  const cliente = document.getElementById('inp-cliente').value.trim();
-  const lugar = document.getElementById('inp-lugar').value.trim();
-  let obs = document.getElementById('inp-obs').value.trim();
-  
-  if(!ppu){ alert('La patente (PPU) es obligatoria'); return; }
-  
-  if (esInventarioActivo && historialPatentesEnSesion.includes(ppu)) {
-    alert(`Error: La patente ${ppu} es un duplicado en esta ventana de inventario.`);
-    return;
-  }
+    function gestionarSesionInventario(estado) {
+      const lblStatus = document.getElementById("inv-live-status");
+      const btnStart = document.getElementById("btn-start-inv");
+      const btnStop = document.getElementById("btn-stop-inv");
 
-  const ahora = new Date();
-  const ts = ahora.toLocaleString('es-CL');
-  
-  const registro = {
-    ts: ts,
-    tipo: selectedMov,
-    ppu: ppu,
-    cont: cont || 'N/A',
-    tipo_chasis: tipo_chasis || 'NO DEFINIDO',
-    cliente: cliente || 'N/A',
-    lugar: lugar || 'N/A',
-    obs: obs || 'N/A'
-  };
-  
-  if (esInventarioActivo) {
-    historialPatentesEnSesion.push(ppu);
-  }
+      if (estado === "INICIAR") {
+        esInventarioActivo = true;
+        marcaTiempoInicioInv = new Date();
+        historialPatentesEnSesion = [];
 
-  ultimaUbicacionGuardada = lugar;
+        localStorage.setItem("ccti_inv_activo", "true");
+        localStorage.setItem("ccti_inv_inicio", marcaTiempoInicioInv.toISOString());
+        localStorage.setItem("ccti_inv_patentes", JSON.stringify([]));
 
-  bitacora.unshift(registro);
-  localStorage.setItem('ccti_bitacora', JSON.stringify(bitacora));
-  
-  enviarACloud(registro);
-  
-  document.getElementById('inp-ppu').value = '';
-  document.getElementById('inp-cont').value = '';
-  document.getElementById('inp-cliente').value = '';
-  document.getElementById('inp-obs').value = '';
-  document.getElementById('auto-lbl').innerText = '';
-  document.getElementById('inp-chasis').selectedIndex = 0;
-  
-  document.getElementById('inp-lugar').value = ultimaUbicacionGuardada;
-  
-  selectedMov = null;
-  document.querySelectorAll('.btn-mov').forEach(b => b.classList.remove('active'));
-  document.getElementById('panel-cronometro-inv').style.display = 'none';
-  
-  alert('¡Movimiento guardado con éxito!');
-  actualizarGraficos();
-}
+        restaurarInterfazInventario();
+      } else if (estado === "TERMINAR") {
+        esInventarioActivo = false;
+        const finInv = new Date();
+        const difMs = finInv - marcaTiempoInicioInv;
+        const mins = Math.floor(difMs / 60000);
+        const segs = Math.floor((difMs % 60000) / 1000);
 
-function enviarACloud(item) {
-  const msgBox = document.getElementById('cloud-msg');
-  msgBox.className = "cloud-status syncing";
-  msgBox.innerText = "⏳ Sincronizando con la oficina en línea...";
-  
-  const payload = {
-    ts: item.ts,
-    movimiento: MOV[item.tipo]?.label || item.tipo,
-    ppu: item.ppu,
-    contenedor: item.cont,
-    tipo_chasis: item.tipo_chasis,
-    cliente: item.cliente,
-    lugar: item.lugar,
-    obs: item.obs
-  };
+        localStorage.removeItem("ccti_inv_activo");
+        localStorage.removeItem("ccti_inv_inicio");
+        localStorage.removeItem("ccti_inv_patentes");
 
-  fetch(WEB_APP_URL, {
-    method: "POST",
-    mode: "no-cors",
-    cache: "no-cache",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  })
-  .then(() => {
-    msgBox.className = "cloud-status success";
-    msgBox.innerText = "✅ Sincronizado con Google Sheets con éxito";
-    setTimeout(() => msgBox.style.display = 'none', 3000);
-  })
-  .catch(err => {
-    console.error(err);
-    msgBox.className = "cloud-status error";
-    msgBox.innerText = "❌ Guardado localmente. Se subirá al recuperar señal.";
-  });
-}
+        lblStatus.innerText = "🟢 Estado: Esperando inicio de tandeo";
+        lblStatus.style.background = "var(--gr)";
+        lblStatus.style.color = "var(--txt2)";
+        btnStart.disabled = false;
+        btnStop.disabled = true;
 
-function actualizarGraficos() {
-  let ent = 0, sal = 0;
-  let html = '';
-  
-  bitacora.forEach(r => {
-    if(r.tipo.startsWith('E')) ent++;
-    if(r.tipo.startsWith('S')) sal++;
-    
-    const labelMov = MOV[r.tipo]?.label || r.tipo;
-    const borderCol = MOV[r.tipo]?.bg || '#888';
-    
-    html += `
-      <div class="log-item" style="border-left-color:${borderCol}">
-        <span class="log-time">${r.ts.split(' ')[1] || ''}</span>
-        <p>${labelMov} — 🚘 ${r.ppu}</p>
-        <p>📦 Cont: ${r.cont} | 🛞 Chasis: ${r.tipo_chasis}</p>
-        <p>🏢 Cli: ${r.cliente} | 📍 Pos: ${r.lugar}</p>
-        ${r.obs !== 'N/A' ? ` <p style="font-style:italic;color:var(--txt3);margin-top:2px">⚠️ Obs: ${r.obs}</p>` : ''}
-      </div>
-    `;
-  });
-  
-  document.getElementById('stat-ent').innerText = ent;
-  document.getElementById('stat-sal').innerText = sal;
-  document.getElementById('log-list').innerHTML = html || '<p style="color:var(--txt3);text-align:center;padding:20px;font-size:13px">No hay registros hoy</p>';
+        alert(`📋 Toma de Inventario Finalizada con Éxito.\n\n⏱️ Duración: ${mins} min ${segs} seg.\n🚚 Unidades Validadas en Patio: ${historialPatentesEnSesion.length}`);
+      }
+    }
 
-  const movCount = { 'E_V': 0, 'E_F': 0, 'S_D': 0, 'S_C': 0, 'INV': 0 };
-  bitacora.forEach(r => { if(movCount[r.tipo] !== undefined) movCount[r.tipo]++; });
-  const maxMov = Math.max(...Object.values(movCount), 1);
-  
-  document.getElementById('mov-chart').innerHTML = Object.entries(MOV).map(([k,m]) => {
-    const n = movCount[k]; const pct = Math.round(n/maxMov*100);
-    return `
-      <div class="bar-wrap">
-        <div class="bar-label"><span style="font-size:11px">${m.label}</span><span style="font-weight:700">${n}</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${m.bg}"></div></div>
-      </div>
-    `;
-  }).join('');
-}
+    function restaurarInterfazInventario() {
+      const lblStatus = document.getElementById("inv-live-status");
+      const btnStart = document.getElementById("btn-start-inv");
+      const btnStop = document.getElementById("btn-stop-inv");
+      const tiempoStr = new Date(marcaTiempoInicioInv).toLocaleTimeString();
+      
+      lblStatus.innerText = `⚠️ EN PROCESO — Iniciado a las: ${tiempoStr}`;
+      lblStatus.style.background = "var(--or-l)";
+      lblStatus.style.color = "var(--or)";
+      btnStart.disabled = true;
+      btnStop.disabled = false;
+    }
 
-function exportCSV() {
-  if(!bitacora.length){ alert('Sin movimientos para exportar'); return; }
-  const rows = [['Fecha y Hora','Movimiento','PPU','Contenedor','Tipo chasis','Cliente','Lugar','Obs']];
-  bitacora.forEach(r => rows.push([r.ts, MOV[r.tipo]?.label || r.tipo, r.ppu, r.cont, r.tipo_chasis, r.cliente, r.lugar, r.obs]));
-  
-  let csvContent = "data:text/csv;charset=utf-8,\uFEFF" + rows.map(e => e.map(val => `"${val}"`).join(",")).join("\n");
-  const encodedUri = encodeURI(csvContent);
-  const link = document.createElement("a");
-  link.setAttribute("href", encodedUri);
-  link.setAttribute("download", `Inventario_Patio_${new Date().toISOString().split('T')[0]}.csv`);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-</script>
+    function switchTab(tab) {
+      document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
+      document.querySelectorAll(".view").forEach((v) => v.classList.remove("active"));
+
+      const idx = ["reg", "patio", "log"].indexOf(tab);
+      document.querySelectorAll(".tab-btn")[idx].classList.add("active");
+      document.getElementById("view-" + tab).classList.add("active");
+
+      if (tab === "patio" || tab === "log") actualizarGraficos();
+    }
+
+    function registrarMovimiento() {
+      if (!selectedMov) {
+        alert("Por favor, selecciona un tipo de movimiento");
+        return;
+      }
+
+      const ppu = document.getElementById("inp-ppu").value.trim().toUpperCase();
+      const cont = document.getElementById("inp-cont").value.trim().toUpperCase();
+      const tipo_chasis = document.getElementById("inp-chasis").value;
+      const cliente = document.getElementById("inp-cliente").value.trim();
+      const lugar = document.getElementById("inp-lugar").value.trim();
+      const obs = document.getElementById("inp-obs").value.trim();
+
+      if (!ppu) {
+        alert("La patente (PPU) es obligatoria");
+        return;
+      }
+
+      if (esInventarioActivo && historialPatentesEnSesion.includes(ppu)) {
+        alert(`Error: La patente ${ppu} es un duplicado en esta ventana de inventario.`);
+        return;
+      }
+
+      const ts = new Date().toLocaleString("es-CL");
+
+      const registro = {
+        ts,
+        tipo: selectedMov,
+        ppu,
+        cont: cont || "N/A",
+        tipo_chasis: tipo_chasis || "NO DEFINIDO",
+        cliente: cliente || "N/A",
+        lugar: lugar || "N/A",
+        obs: obs || "N/A",
+      };
+
+      if (esInventarioActivo) {
+        historialPatentesEnSesion.push(ppu);
+        localStorage.setItem("ccti_inv_patentes", JSON.stringify(historialPatentesEnSesion));
+      }
+
+      ultimaUbicacionGuardada = lugar;
+      localStorage.setItem("ccti_ultima_ub", ultimaUbicacionGuardada);
+
+      bitacora.unshift(registro);
+      localStorage.setItem("ccti_bitacora", JSON.stringify(bitacora));
+
+      enviarACloud(registro);
+
+      document.getElementById("inp-ppu").value = "";
+      document.getElementById("inp-cont").value = "";
+      document.getElementById("inp-cliente").value = "";
+      document.getElementById("inp-obs").value = "";
+      document.getElementById("auto-lbl").innerText = "";
+      document.getElementById("inp-chasis").selectedIndex = 0;
+      document.getElementById("inp-lugar").value = ultimaUbicacionGuardada;
+
+      selectedMov = null;
+      document.querySelectorAll(".btn-mov").forEach((b) => b.classList.remove("active"));
+      document.getElementById("panel-cronometro-inv").style.display = "none";
+
+      alert("¡Movimiento guardado con éxito!");
+      actualizarGraficos();
+    }
+
+    function enviarACloud(item) {
+      const msgBox = document.getElementById("cloud-msg");
+      msgBox.className = "cloud-status syncing";
+      msgBox.innerText = "⏳ Sincronizando con la oficina en línea...";
+
+      const payload = {
+        ts: item.ts,
+        movimiento: MOV[item.tipo]?.label || item.tipo,
+        ppu: item.ppu,
+        contenedor: item.cont,
+        tipo_chasis: item.tipo_chasis,
+        cliente: item.cliente,
+        lugar: item.lugar,
+        obs: item.obs,
+      };
+
+      fetch(WEB_APP_URL, {
+        method: "POST",
+        mode: "no-cors",
+        cache: "no-cache",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+        .then(() => {
+          msgBox.className = "cloud-status success";
+          msgBox.innerText = "✅ Sincronizado con Google Sheets con éxito";
+          setTimeout(() => (msgBox.style.display = "none"), 3000);
+        })
+        .catch((err) => {
+          console.error(err);
+          msgBox.className = "cloud-status error";
+          msgBox.innerText = "❌ Guardado localmente. Se subirá al recuperar señal.";
+        });
+    }
+
+    function actualizarGraficos() {
+      let ent = 0;
+      let sal = 0;
+      let html = "";
+
+      bitacora.forEach((r) => {
+        if (r.tipo.startsWith("E")) ent++;
+        if (r.tipo.startsWith("S")) sal++;
+
+        const labelMov = MOV[r.tipo]?.label || r.tipo;
+        const borderCol = MOV[r.tipo]?.bg || "#888";
+
+        html += `
+          <div class="log-item" style="border-left-color: ${borderCol};">
+            <span class="log-time">${r.ts.split(" ")[1] || ""}</span>
+            <p>${labelMov} — 🚘 ${r.ppu}</p>
+            <p>📦 Cont: ${r.cont} | 🛞 Chasis: ${r.tipo_chasis}</p>
+            <p>🏢 Cli: ${r.cliente} | 📍 Pos: ${r.lugar}</p>
+            ${r.obs !== "N/A" ? `<p style="font-style: italic; color: var(--txt3); margin-top: 2px;">⚠️ Obs: ${r.obs}</p>` : ""}
+          </div>
+        `;
+      });
+
+      document.getElementById("stat-ent").innerText = ent;
+      document.getElementById("stat-sal").innerText = sal;
+      document.getElementById("log-list").innerHTML = html || '<p style="color: var(--txt3); text-align: center; padding: 20px; font-size: 13px;">No hay registros hoy</p>';
+
+      const movCount = { E_V: 0, E_F: 0, S_D: 0, S_C: 0, INV: 0 };
+      bitacora.forEach((r) => {
+        if (movCount[r.tipo] !== undefined) movCount[r.tipo]++;
+      });
+
+      const maxMov = Math.max(...Object.values(movCount), 1);
+
+      document.getElementById("mov-chart").innerHTML = Object.entries(MOV)
+        .map(([k, m]) => {
+          const n = movCount[k];
+          const pct = Math.round((n / maxMov) * 100);
+          return `
+            <div class="bar-wrap">
+              <div class="bar-label">
+                <span style="font-size: 11px;">${m.label}</span>
+                <span style="font-weight: 700;">${n}</span>
+              </div>
+              <div class="bar-track">
+                <div class="bar-fill" style="width: ${pct}%; background: ${m.bg};"></div>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    function exportCSV() {
+      if (!bitacora.length) {
+        alert("Sin movimientos para exportar");
+        return;
+      }
+
+      const rows = [["Fecha y Hora", "Movimiento", "PPU", "Contenedor", "Tipo chasis", "Cliente", "Lugar", "Obs"]];
+
+      bitacora.forEach((r) =>
+        rows.push([r.ts, MOV[r.tipo]?.label || r.tipo, r.ppu, r.cont, r.tipo_chasis, r.cliente, r.lugar, r.obs])
+      );
+
+      const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + rows.map((e) => e.map((val) => `"${val}"`).join(",")).join("\n");
+
+      const link = document.createElement("a");
+      link.setAttribute("href", encodeURI(csvContent));
+      link.setAttribute("download", `Inventario_Patio_${new Date().toISOString().split("T")[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  </script>
 </body>
 </html>
