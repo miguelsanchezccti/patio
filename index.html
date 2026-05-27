@@ -111,7 +111,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Ar
         </div>
         <div class="form-group">
           <label>Contenedor / Chasis</label>
-          <input type="text" id="inp-cont" class="input-text" placeholder="CSXU1234567" style="text-transform:uppercase" oninput="evaluarDisponibilidadAutomatica()">
+          <input type="text" id="inp-cont" class="input-text" placeholder="CSXU1234567" style="text-transform:uppercase" oninput="evaluarFlujoContenedorYNaviera(this.value)">
         </div>
       </div>
       <div class="row-inputs">
@@ -198,12 +198,23 @@ const BASE_CHASIS_CCTI = {
   "HXHT28": "CORTINA", "HXHT29": "CORTINA", "HXHT30": "CORTINA", "HXFB13": "FURGON REEFER"
 };
 
+// Prefijos portuarios estandarizados para Maipú
+const PREFIJOS_NAVIERAS = {
+  "MSCU": "MSC", "MEDU": "MSC",
+  "ONEU": "ONE",
+  "MAEU": "MAERSK",
+  "SUDU": "HAMBURG SÜD",
+  "COSU": "COSCO",
+  "OOLU": "OOCL"
+};
+
 let selectedMov = null;
 let bitacora = JSON.parse(localStorage.getItem('ccti_bitacora')) || [];
 
 let esInventarioActivo = false;
 let marcaTiempoInicioInv = null;
-let historialPatentesEnSesion = []; // CORREGIDO: Espacio de sintaxis removido para evitar congelamientos
+let historialPatentesEnSesion = []; 
+let ultimaUbicacionGuardada = ""; // Guarda memoria del último sector analizado
 
 document.addEventListener('DOMContentLoaded', () => {
   const opciones = document.querySelectorAll('.btn-mov');
@@ -236,7 +247,10 @@ function detectarChasisMaster(valor) {
     return;
   }
   
-  const ppuClean = valor.trim().toUpperCase();
+  // ROBUSTEZ 1: Limpieza instantánea invisible de espacios y guiones intermedios
+  const ppuClean = valor.replace(/[^a-zA-Z0-9]/g, '').trim().toUpperCase();
+  document.getElementById('inp-ppu').value = ppuClean; // Modifica el cuadro visual sobre la marcha
+
   const selectChasis = document.getElementById('inp-chasis');
   const lblAuto = document.getElementById('auto-lbl');
 
@@ -253,28 +267,40 @@ function detectarChasisMaster(valor) {
     lblAuto.innerText = `⚡ Reconocido: ${chasisAsignado}`;
     lblAuto.style.color = "var(--vd)";
     
-    // Al ingresar la patente, se ejecuta la regla inteligente de asignación de estado inmediata
-    evaluarDisponibilidadAutomatica();
+    evaluarFlujoContenedorYNaviera(""); // Ejecuta validación inicial
   } else {
     lblAuto.innerText = "Patente Nueva / No en Maestro";
     lblAuto.style.color = "var(--txt3)";
   }
 }
 
-// NUEVA FUNCIÓN AUTOMÁTICA INTELIGENTE: Sin manualidad para el operador
-function evaluarDisponibilidadAutomatica() {
+// ROBUSTEZ 2, 3 y NUEVA LÓGICA: Control automatizado de Estados y Navieras sin clics
+function evaluarFlujoContenedorYNaviera(valorContenedor) {
   const ppu = document.getElementById('inp-ppu').value.trim();
-  const contenedor = document.getElementById('inp-cont').value.trim();
   const txtObs = document.getElementById('inp-obs');
+  const inputCliente = document.getElementById('inp-cliente');
+  const inputCont = document.getElementById('inp-cont');
 
-  if (!ppu) return; // Si no hay patente ingresada, no hace nada.
+  // Limpieza rápida de la sigla eliminando caracteres raros
+  let contClean = valorContenedor.replace(/[^a-zA-Z0-9]/g, '').trim().toUpperCase();
+  inputCont.value = contClean;
 
-  // Regla de Negocio: Si hay patente pero NO hay contenedor -> DISPONIBLE
-  if (contenedor === "") {
+  if (!ppu) return;
+
+  // Lógica: Si el campo contenedor está vacío -> DISPONIBLE
+  if (contClean === "") {
     txtObs.value = "DISPONIBLE";
   } else {
-    // Si hay patente y ADEMÁS escribió un contenedor -> OCUPADO
+    // Si el campo contenedor tiene texto -> OCUPADO
     txtObs.value = "OCUPADO";
+
+    // Extrae las primeras 4 letras para saber qué Naviera es de manera inteligente
+    if (contClean.length >= 4) {
+      const prefijo = contClean.substring(0, 4);
+      if (PREFIJOS_NAVIERAS[prefijo]) {
+        inputCliente.value = PREFIJOS_NAVIERAS[prefijo];
+      }
+    }
   }
 }
 
@@ -357,6 +383,9 @@ function registrarMovimiento() {
     historialPatentesEnSesion.push(ppu);
   }
 
+  // ROBUSTEZ 4: Guarda en memoria la ubicación para heredarla en el próximo registro
+  ultimaUbicacionGuardada = lugar;
+
   bitacora.unshift(registro);
   localStorage.setItem('ccti_bitacora', JSON.stringify(bitacora));
   
@@ -365,10 +394,12 @@ function registrarMovimiento() {
   document.getElementById('inp-ppu').value = '';
   document.getElementById('inp-cont').value = '';
   document.getElementById('inp-cliente').value = '';
-  document.getElementById('inp-lugar').value = '';
   document.getElementById('inp-obs').value = '';
   document.getElementById('auto-lbl').innerText = '';
   document.getElementById('inp-chasis').selectedIndex = 0;
+  
+  // Rellena la ubicación automáticamente con el sector anterior para acelerar el tandeo
+  document.getElementById('inp-lugar').value = ultimaUbicacionGuardada;
   
   selectedMov = null;
   document.querySelectorAll('.btn-mov').forEach(b => b.classList.remove('active'));
