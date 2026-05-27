@@ -69,6 +69,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Ar
 .btn-inv-action:active{opacity:0.8}
 .btn-inv-action:disabled{background:#BDC3C7 !important;cursor:not-allowed;opacity:0.6}
 .status-badge-inv{font-size:11px;font-weight:700;color:var(--txt2);background:var(--gr);padding:8px;border-radius:6px;border:1px solid var(--gr2);text-align:center;margin-bottom:4px}
+
+/* NUEVO: Contenedor para el alineamiento del Checkbox de Disponibilidad */
+.row-obs{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end}
+.chk-container{display:flex;align-items:center;gap:6px;background:var(--gr);border:1.5px solid var(--gr2);border-radius:8px;padding:11px 12px;height:43px;cursor:pointer;user-select:none}
+.chk-container input{width:16px;height:16px;cursor:pointer}
+.chk-container span{font-size:12px;font-weight:700;color:var(--txt2)}
 </style>
 </head>
 <body>
@@ -136,12 +142,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Ar
         <label>Ubicación en Patio</label>
         <input type="text" id="inp-lugar" class="input-text" placeholder="Ej: Sector A-3 / Taller">
       </div>
-      <div class="form-group">
-        <label>Observaciones</label>
-        <input type="text" id="inp-obs" class="input-text" placeholder="Ej: Daño en piña derecha, pendiente taller">
+      
+      <div class="row-obs">
+        <div class="form-group" style="margin-bottom:0">
+          <label>Observaciones</label>
+          <input type="text" id="inp-obs" class="input-text" placeholder="Ej: Daño en piña derecha, pendiente taller">
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="chk-container">
+            <input type="checkbox" id="chk-disponible" onchange="alternarDisponibilidadRapida(this.checked)">
+            <span>📦❌ SIN CONT. (DISPONIBLE)</span>
+          </label>
+        </div>
       </div>
       
-      <button class="btn-submit" onclick="registrarMovimiento()">Confirmar Movimiento</button>
+      <button class="btn-submit" onclick="registrarMovimiento()" style="margin-top:20px">Confirmar Movimiento</button>
       <div id="cloud-msg" class="cloud-status"></div>
     </div>
   </div>
@@ -186,11 +201,8 @@ const MOV = {
   'INV': { label: 'Inventario Patio', bg: 'var(--or)', border: 'var(--or)' }
 };
 
-// =====================================================================
-// BASE DE DATOS CALIBRADA FIEL A TU ÚLTIMO ARCHIVO MAESTRO 2026
-// =====================================================================
 const BASE_CHASIS_CCTI = {
-  "JK2591": "CONTENEDORES 20'", // <--- CORREGIDO: Ahora se coteja directo a 20'
+  "JK2591": "CONTENEDORES 20'",
   "GRDY34": "CONTENEDORES 40'", "GRDY35": "CONTENEDORES 40'", "GRDY36": "CONTENEDORES 40'",
   "GRDY37": "CONTENEDORES 40'", "GRDY38": "CONTENEDORES 40'", "GRDY39": "CONTENEDORES 40'",
   "PXKS67": "CONTENEDORES 20' Y 40'", "PXKS76": "CONTENEDORES 20' Y 40'", "PXKS86": "CONTENEDORES 20' Y 40'", 
@@ -205,7 +217,7 @@ let bitacora = JSON.parse(localStorage.getItem('ccti_bitacora')) || [];
 
 let esInventarioActivo = false;
 let marcaTiempoInicioInv = null;
-let historialPatentesEnSesion = []; 
+let historialPatentes EnSesion = []; 
 
 document.addEventListener('DOMContentLoaded', () => {
   const opciones = document.querySelectorAll('.btn-mov');
@@ -256,6 +268,18 @@ function detectarChasisMaster(valor) {
   } else {
     lblAuto.innerText = "Patente Nueva / No en Maestro";
     lblAuto.style.color = "var(--txt3)";
+  }
+}
+
+// NUEVA FUNCIÓN: Al presionar la casilla, rellena o limpia el texto de observaciones de inmediato
+function alternarDisponibilidadRapida(marcado) {
+  const txtObs = document.getElementById('inp-obs');
+  if (marcado) {
+    if (!txtObs.value.toUpperCase().includes("DISPONIBLE")) {
+      txtObs.value = txtObs.value ? txtObs.value + " - DISPONIBLE" : "DISPONIBLE";
+    }
+  } else {
+    txtObs.value = txtObs.value.replace(" - DISPONIBLE", "").replace("DISPONIBLE", "").trim();
   }
 }
 
@@ -311,7 +335,7 @@ function registrarMovimiento() {
   const tipo_chasis = document.getElementById('inp-chasis').value;
   const cliente = document.getElementById('inp-cliente').value.trim();
   const lugar = document.getElementById('inp-lugar').value.trim();
-  const obs = document.getElementById('inp-obs').value.trim();
+  let obs = document.getElementById('inp-obs').value.trim();
   
   if(!ppu){ alert('La patente (PPU) es obligatoria'); return; }
   
@@ -343,13 +367,15 @@ function registrarMovimiento() {
   
   enviarACloud(registro);
   
+  // Limpieza de campos
   document.getElementById('inp-ppu').value = '';
   document.getElementById('inp-cont').value = '';
   document.getElementById('inp-cliente').value = '';
   document.getElementById('inp-lugar').value = '';
   document.getElementById('inp-obs').value = '';
   document.getElementById('auto-lbl').innerText = '';
-  document.getElementById('inp-chasis').selectedIndex = 0; // Resetea el selector al valor vacío inicial
+  document.getElementById('inp-chasis').selectedIndex = 0;
+  document.getElementById('chk-disponible').checked = false; // Desmarcar el checkbox automático
   
   selectedMov = null;
   document.querySelectorAll('.btn-mov').forEach(b => b.classList.remove('active'));
@@ -411,7 +437,7 @@ function actualizarGraficos() {
         <p>${labelMov} — 🚘 ${r.ppu}</p>
         <p>📦 Cont: ${r.cont} | 🛞 Chasis: ${r.tipo_chasis}</p>
         <p>🏢 Cli: ${r.cliente} | 📍 Pos: ${r.lugar}</p>
-        ${r.obs !== 'N/A' ? `<p style="font-style:italic;color:var(--txt3);margin-top:2px">⚠️ Obs: ${r.obs}</p>` : ''}
+        ${r.obs !== 'N/A' ? ` <p style="font-style:italic;color:var(--txt3);margin-top:2px">⚠️ Obs: ${r.obs}</p>` : ''}
       </div>
     `;
   });
