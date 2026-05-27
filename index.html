@@ -64,7 +64,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Ar
 .cloud-status.error{color:var(--rj);display:block}
 .auto-badge{font-size:10px;color:var(--az2);font-weight:bold;margin-top:2px;display:block}
 
-/* NUEVOS ESTILOS PARA LA CONSOLA DE INVENTARIO */
 .inv-control-box{display:flex;gap:10px;margin-top:6px;margin-bottom:8px}
 .btn-inv-action{flex:1;padding:10px;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;color:white;transition:opacity 0.15s}
 .btn-inv-action:active{opacity:0.8}
@@ -119,10 +118,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Ar
         <div class="form-group">
           <label>Tipo Chasis</label>
           <select id="inp-chasis">
-            <option value="Chasis 20' Normal">Chasis 20' Normal</option>
-            <option value="Chasis 40' Normal" selected>Chasis 40' Normal</option>
-            <option value="3 Ejes Multi">3 Ejes Multi</option>
-            <option value="2 Ejes Multi">2 Ejes Multi</option>
+            <option value="" disabled selected>Seleccione Tipo...</option>
+            <option value="CONTENEDORES 20'">Chasis 20' Normal</option>
+            <option value="CONTENEDORES 40'">Chasis 40' Normal</option>
+            <option value="CONTENEDORES 20' Y 40'">3 Ejes Multi (20/40)</option>
             <option value="CORTINA">Cortina</option>
             <option value="FURGON REEFER">Furgón Reefer</option>
           </select>
@@ -188,13 +187,14 @@ const MOV = {
 };
 
 // =====================================================================
-// BASE DE DATOS EXTRACTADA DE TUS SEMIRREMOLQUES (MAESTRO COMPLETO CCTI)
+// BASE DE DATOS CALIBRADA FIEL A TU ÚLTIMO ARCHIVO MAESTRO 2026
 // =====================================================================
 const BASE_CHASIS_CCTI = {
-  "GRDY34": "Chasis 40' Normal", "GRDY35": "Chasis 40' Normal", "GRDY36": "Chasis 40' Normal",
-  "GRDY37": "Chasis 40' Normal", "GRDY38": "Chasis 40' Normal", "GRDY39": "Chasis 40' Normal",
-  "PXKS67": "3 Ejes Multi", "PXKS76": "3 Ejes Multi", "PXKS86": "3 Ejes Multi", 
-  "PXKS96": "3 Ejes Multi", "PXKT10": "3 Ejes Multi", "HXHB32": "CORTINA", 
+  "JK2591": "CONTENEDORES 20'", // <--- CORREGIDO: Ahora se coteja directo a 20'
+  "GRDY34": "CONTENEDORES 40'", "GRDY35": "CONTENEDORES 40'", "GRDY36": "CONTENEDORES 40'",
+  "GRDY37": "CONTENEDORES 40'", "GRDY38": "CONTENEDORES 40'", "GRDY39": "CONTENEDORES 40'",
+  "PXKS67": "CONTENEDORES 20' Y 40'", "PXKS76": "CONTENEDORES 20' Y 40'", "PXKS86": "CONTENEDORES 20' Y 40'", 
+  "PXKS96": "CONTENEDORES 20' Y 40'", "PXKT10": "CONTENEDORES 20' Y 40'", "HXHB32": "CORTINA", 
   "KYPR97": "CORTINA", "PWYL65": "CORTINA", "PWYL67": "CORTINA", "PWYL68": "CORTINA",
   "PWYL69": "CORTINA", "PWYL70": "CORTINA", "PWYL72": "CORTINA", "HXHT27": "CORTINA",
   "HXHT28": "CORTINA", "HXHT29": "CORTINA", "HXHT30": "CORTINA", "HXFB13": "FURGON REEFER"
@@ -203,7 +203,6 @@ const BASE_CHASIS_CCTI = {
 let selectedMov = null;
 let bitacora = JSON.parse(localStorage.getItem('ccti_bitacora')) || [];
 
-// ESTADOS PARA PREVENCIÓN DE REGISTROS EN VENTANA DE TIEMPO
 let esInventarioActivo = false;
 let marcaTiempoInicioInv = null;
 let historialPatentesEnSesion = []; 
@@ -216,7 +215,6 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.classList.add('active');
       selectedMov = btn.getAttribute('data-type');
       
-      // Control visual: Muestra el panel del cronómetro solo si selecciona el botón de Inventario
       const panelCronometro = document.getElementById('panel-cronometro-inv');
       if (selectedMov === 'INV') {
         panelCronometro.style.display = 'block';
@@ -233,9 +231,6 @@ document.addEventListener('DOMContentLoaded', () => {
   actualizarGraficos();
 });
 
-// =====================================================================
-// CONTROL INTELIGENTE: ASIGNACIÓN DIRECTA DESDE MAESTRO Y ANTIDUPLICADO
-// =====================================================================
 function detectarChasisMaster(valor) {
   if (!valor) {
     document.getElementById('auto-lbl').innerText = "";
@@ -246,28 +241,24 @@ function detectarChasisMaster(valor) {
   const selectChasis = document.getElementById('inp-chasis');
   const lblAuto = document.getElementById('auto-lbl');
 
-  // CONTROL DE SEGURIDAD: Bloquea si detecta que la patente ya fue capturada en este inventario
   if (esInventarioActivo && historialPatentesEnSesion.includes(ppuClean)) {
     alert(`⚠️ REGISTRO DUPLICADO BLOQUEADO:\nLa patente ${ppuClean} ya fue ingresada durante la sesión de inventario en curso.`);
-    document.getElementById('inp-ppu').value = ""; // Limpia el cuadro inmediatamente
+    document.getElementById('inp-ppu').value = "";
     lblAuto.innerText = "";
     return;
   }
 
-  // BUSQUEDA DIRECTA EN TU ARCHIVO DE SEMIRREMOLQUES
   if (BASE_CHASIS_CCTI[ppuClean]) {
     const chasisAsignado = BASE_CHASIS_CCTI[ppuClean];
     selectChasis.value = chasisAsignado;
     lblAuto.innerText = `⚡ Reconocido: ${chasisAsignado}`;
     lblAuto.style.color = "var(--vd)";
   } else {
-    // Si la patente no está en el listado, mantiene el valor manual sin entorpecer
     lblAuto.innerText = "Patente Nueva / No en Maestro";
     lblAuto.style.color = "var(--txt3)";
   }
 }
 
-// GESTIÓN DEL CRONÓMETRO DE INVENTARIO
 function gestionarSesionInventario(estado) {
   const lblStatus = document.getElementById('inv-live-status');
   const btnStart = document.getElementById('btn-start-inv');
@@ -276,7 +267,7 @@ function gestionarSesionInventario(estado) {
   if (estado === 'INICIAR') {
     esInventarioActivo = true;
     marcaTiempoInicioInv = new Date();
-    historialPatentesEnSesion = []; // Resetea las capturas de la tanda anterior
+    historialPatentesEnSesion = [];
     
     lblStatus.innerText = `⚠️ EN PROCESO — Iniciado a las: ${marcaTiempoInicioInv.toLocaleTimeString()}`;
     lblStatus.style.background = "var(--or-l)";
@@ -324,7 +315,6 @@ function registrarMovimiento() {
   
   if(!ppu){ alert('La patente (PPU) es obligatoria'); return; }
   
-  // Resguardo extra al presionar el botón de enviar
   if (esInventarioActivo && historialPatentesEnSesion.includes(ppu)) {
     alert(`Error: La patente ${ppu} es un duplicado en esta ventana de inventario.`);
     return;
@@ -338,13 +328,12 @@ function registrarMovimiento() {
     tipo: selectedMov,
     ppu: ppu,
     cont: cont || 'N/A',
-    tipo_chasis: tipo_chasis,
+    tipo_chasis: tipo_chasis || 'NO DEFINIDO',
     cliente: cliente || 'N/A',
     lugar: lugar || 'N/A',
     obs: obs || 'N/A'
   };
   
-  // Si está el inventario activo, inyectamos la patente a la lista de control de la sesión
   if (esInventarioActivo) {
     historialPatentesEnSesion.push(ppu);
   }
@@ -360,8 +349,8 @@ function registrarMovimiento() {
   document.getElementById('inp-lugar').value = '';
   document.getElementById('inp-obs').value = '';
   document.getElementById('auto-lbl').innerText = '';
+  document.getElementById('inp-chasis').selectedIndex = 0; // Resetea el selector al valor vacío inicial
   
-  // Limpieza de estados visuales del botón seleccionado
   selectedMov = null;
   document.querySelectorAll('.btn-mov').forEach(b => b.classList.remove('active'));
   document.getElementById('panel-cronometro-inv').style.display = 'none';
