@@ -7,368 +7,71 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Patio Control</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     :root {
-      --az: #1F3864;
-      --az2: #2E75B6;
-      --az-l: #D6E4F0;
-      --vd: #1D6A2E;
-      --vd-l: #E2EFDA;
-      --am: #7D6608;
-      --am-l: #FFF2CC;
-      --rj: #9C0006;
-      --rj-l: #FFE7E7;
-      --pu: #3A1F6B;
-      --pu-l: #EDE7FF;
-      --or: #D35400;
-      --or-l: #FEDBD0;
-      --gr: #F5F5F5;
-      --gr2: #E0E0E0;
-      --txt: #1a1a1a;
-      --txt2: #555;
-      --txt3: #888;
-      --card: #fff;
-      --bg: #F0F2F5;
-      --radius: 12px;
-      --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      --az: #1F3864; --az2: #2E75B6; --az-l: #D6E4F0;
+      --vd: #1D6A2E; --vd-l: #E2EFDA; --am: #7D6608; --am-l: #FFF2CC;
+      --rj: #9C0006; --rj-l: #FFE7E7; --pu: #3A1F6B; --pu-l: #EDE7FF;
+      --or: #D35400; --or-l: #FEDBD0; --gr: #F5F5F5; --gr2: #E0E0E0;
+      --txt: #1a1a1a; --txt2: #555; --txt3: #888; --card: #fff;
+      --bg: #F0F2F5; --radius: 12px; --shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--txt);
-      line-height: 1.4;
-    }
-
-    /* ── Navbar ── */
-    .navbar {
-      background: var(--az);
-      color: #fff;
-      padding: 16px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: var(--shadow);
-      text-align: center;
-    }
-
-    .navbar h1 {
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-
-    .navbar p {
-      font-size: 12px;
-      color: var(--az-l);
-      margin-top: 2px;
-    }
-
-    /* ── Layout ── */
-    .container {
-      padding: 16px;
-      max-width: 500px;
-      margin: 0 auto;
-      padding-bottom: 80px;
-    }
-
-    /* ── Cards ── */
-    .card {
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: var(--shadow);
-    }
-
-    .card-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--az);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
-    }
-
-    /* ── Movement buttons ── */
-    .grid-mov {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    .btn-mov {
-      background: var(--gr);
-      border: 2px solid var(--gr2);
-      border-radius: 10px;
-      padding: 12px 8px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .btn-mov span:first-child  { font-size: 18px; }
-    .btn-mov span:last-child   { font-size: 11px; font-weight: 600; color: var(--txt2); }
-
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--txt); line-height: 1.4; }
+    .navbar { background: var(--az); color: #fff; padding: 16px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); text-align: center; }
+    .navbar h1 { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; }
+    .navbar p { font-size: 12px; color: var(--az-l); margin-top: 2px; }
+    .container { padding: 16px; max-width: 500px; margin: 0 auto; padding-bottom: 80px; }
+    .card { background: var(--card); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; box-shadow: var(--shadow); }
+    .card-title { font-size: 14px; font-weight: 700; color: var(--az); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
+    .grid-mov { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+    .btn-mov { background: var(--gr); border: 2px solid var(--gr2); border-radius: 10px; padding: 12px 8px; text-align: center; cursor: pointer; transition: all 0.2s ease; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .btn-mov span:first-child { font-size: 18px; } .btn-mov span:last-child { font-size: 11px; font-weight: 600; color: var(--txt2); }
     .btn-mov.active[data-type="E_V"] { background: var(--vd-l); border-color: var(--vd); color: var(--vd); }
     .btn-mov.active[data-type="E_F"] { background: var(--vd-l); border-color: var(--vd); color: var(--vd); }
     .btn-mov.active[data-type="S_D"] { background: var(--am-l); border-color: var(--am); color: var(--am); }
     .btn-mov.active[data-type="S_C"] { background: var(--rj-l); border-color: var(--rj); color: var(--rj); }
     .btn-mov.active[data-type="INV"] { background: var(--or-l); border-color: var(--or); color: var(--or); }
-
-    /* ── Form ── */
-    .form-group {
-      margin-bottom: 12px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--txt2);
-      margin-bottom: 4px;
-      text-transform: uppercase;
-    }
-
-    .input-text,
-    select {
-      width: 100%;
-      padding: 11px;
-      border: 1.5px solid var(--gr2);
-      border-radius: 8px;
-      font-size: 14px;
-      outline: none;
-      background: #fff;
-      transition: border-color 0.2s;
-    }
-
-    .input-text:focus,
-    select:focus { border-color: var(--az2); }
-
-    .input-text::placeholder {
-      color: var(--txt3);
-      font-size: 13px;
-    }
-
-    .row-inputs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .auto-badge {
-      font-size: 10px;
-      color: var(--az2);
-      font-weight: bold;
-      margin-top: 2px;
-      display: block;
-    }
-
-    /* ── Submit ── */
-    .btn-submit {
-      width: 100%;
-      background: var(--az);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: 14px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(31, 56, 100, 0.3);
-      transition: all 0.2s;
-      margin-top: 4px;
-    }
-
-    .btn-submit:active {
-      transform: scale(0.98);
-      box-shadow: none;
-    }
-
-    /* ── Stats ── */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    .stat-box {
-      background: var(--gr);
-      padding: 12px;
-      border-radius: 10px;
-      text-align: center;
-      border: 1px solid var(--gr2);
-    }
-
-    .stat-box p  { font-size: 10px; color: var(--txt2); font-weight: 700; text-transform: uppercase; }
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 11px; font-weight: 700; color: var(--txt2); margin-bottom: 4px; text-transform: uppercase; }
+    .input-text, select { width: 100%; padding: 11px; border: 1.5px solid var(--gr2); border-radius: 8px; font-size: 14px; outline: none; background: #fff; transition: border-color 0.2s; }
+    .input-text:focus, select:focus { border-color: var(--az2); }
+    .input-text::placeholder { color: var(--txt3); font-size: 13px; }
+    .row-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .auto-badge { font-size: 10px; color: var(--az2); font-weight: bold; margin-top: 2px; display: block; }
+    .btn-submit { width: 100%; background: var(--az); color: #fff; border: none; border-radius: 10px; padding: 14px; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(31,56,100,0.3); transition: all 0.2s; margin-top: 4px; }
+    .btn-submit:active { transform: scale(0.98); box-shadow: none; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+    .stat-box { background: var(--gr); padding: 12px; border-radius: 10px; text-align: center; border: 1px solid var(--gr2); }
+    .stat-box p { font-size: 10px; color: var(--txt2); font-weight: 700; text-transform: uppercase; }
     .stat-box h3 { font-size: 20px; color: var(--az); margin-top: 2px; font-weight: 800; }
-
-    /* ── Bar chart ── */
-    .bar-chart   { margin-top: 8px; }
-    .bar-wrap    { margin-bottom: 8px; }
-
-    .bar-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      margin-bottom: 2px;
-      font-weight: 500;
-    }
-
-    .bar-track {
-      background: var(--gr2);
-      height: 8px;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .bar-fill {
-      height: 100%;
-      border-radius: 4px;
-      transition: width 0.4s ease;
-    }
-
-    /* ── Log ── */
-    .log-item {
-      background: var(--gr);
-      padding: 10px;
-      border-radius: 8px;
-      margin-bottom: 8px;
-      border-left: 4px solid var(--gr2);
-      font-size: 12px;
-      position: relative;
-    }
-
+    .bar-chart { margin-top: 8px; } .bar-wrap { margin-bottom: 8px; }
+    .bar-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 2px; font-weight: 500; }
+    .bar-track { background: var(--gr2); height: 8px; border-radius: 4px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+    .log-item { background: var(--gr); padding: 10px; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid var(--gr2); font-size: 12px; position: relative; }
     .log-item p:first-child { font-weight: 700; color: var(--txt); margin-bottom: 2px; }
-    .log-item p:last-child  { color: var(--txt2); font-size: 11px; }
-
-    .log-time {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 10px;
-      color: var(--txt3);
-      font-weight: 600;
-    }
-
-    /* ── Export ── */
-    .btn-export {
-      display: block;
-      width: 100%;
-      background: var(--vd);
-      color: #fff;
-      text-align: center;
-      padding: 12px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 700;
-      margin-top: 8px;
-      border: none;
-      cursor: pointer;
-    }
-
-    /* ── Tab bar ── */
-    .tab-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #fff;
-      height: 56px;
-      display: flex;
-      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-      z-index: 100;
-    }
-
-    .tab-btn {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: var(--txt3);
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 11px;
-      gap: 2px;
-    }
-
-    .tab-btn.active          { color: var(--az); }
-    .tab-btn span:first-child { font-size: 18px; }
-
-    /* ── Views ── */
-    .view        { display: none; }
-    .view.active { display: block; }
-
-    /* ── Cloud sync status ── */
-    .cloud-status          { text-align: center; font-size: 11px; font-weight: 600; margin-top: 6px; display: none; }
-    .cloud-status.syncing  { color: var(--az2); display: block; }
-    .cloud-status.success  { color: var(--vd);  display: block; }
-    .cloud-status.error    { color: var(--rj);  display: block; }
-
-    /* ── Inventory session panel ── */
-    .inv-control-box {
-      display: flex;
-      gap: 10px;
-      margin-top: 6px;
-      margin-bottom: 8px;
-    }
-
-    .btn-inv-action {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      color: white;
-      transition: opacity 0.15s;
-    }
-
-    .btn-inv-action:active   { opacity: 0.8; }
-    .btn-inv-action:disabled { background: #BDC3C7 !important; cursor: not-allowed; opacity: 0.6; }
-
-    .status-badge-inv {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--txt2);
-      background: var(--gr);
-      padding: 8px;
-      border-radius: 6px;
-      border: 1px solid var(--gr2);
-      text-align: center;
-      margin-bottom: 4px;
-    }
+    .log-item p:last-child { color: var(--txt2); font-size: 11px; }
+    .log-time { position: absolute; top: 10px; right: 10px; font-size: 10px; color: var(--txt3); font-weight: 600; }
+    .btn-export { display: block; width: 100%; background: var(--vd); color: #fff; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 700; margin-top: 8px; border: none; cursor: pointer; }
+    .tab-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; height: 56px; display: flex; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); z-index: 100; }
+    .tab-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--txt3); cursor: pointer; font-weight: 600; font-size: 11px; gap: 2px; }
+    .tab-btn.active { color: var(--az); } .tab-btn span:first-child { font-size: 18px; }
+    .view { display: none; } .view.active { display: block; }
+    .cloud-status { text-align: center; font-size: 11px; font-weight: 600; margin-top: 6px; display: none; }
+    .cloud-status.syncing { color: var(--az2); display: block; } .cloud-status.success { color: var(--vd); display: block; } .cloud-status.error { color: var(--rj); display: block; }
+    .inv-control-box { display: flex; gap: 10px; margin-top: 6px; margin-bottom: 8px; }
+    .btn-inv-action { flex: 1; padding: 10px; border: none; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; color: white; transition: opacity 0.15s; }
+    .btn-inv-action:active { opacity: 0.8; } .btn-inv-action:disabled { background: #BDC3C7 !important; cursor: not-allowed; opacity: 0.6; }
+    .status-badge-inv { font-size: 11px; font-weight: 700; color: var(--txt2); background: var(--gr); padding: 8px; border-radius: 6px; border: 1px solid var(--gr2); text-align: center; margin-bottom: 4px; }
   </style>
 </head>
 <body>
-
   <div class="navbar">
     <h1>PATIO CONTROL</h1>
     <p id="nav-date">CCTI S.A. — Maipú</p>
   </div>
-
   <div class="container">
-
     <div id="view-reg" class="view active">
-
       <div class="card">
         <div class="card-title">📥 Tipo de Movimiento</div>
         <div class="grid-mov">
@@ -381,38 +84,26 @@
           <div class="btn-mov" data-type="INV" id="btn-mode-inv"><span>📋</span><span>Inventario de Patio</span></div>
         </div>
       </div>
-
       <div class="card" id="panel-cronometro-inv" style="display: none; border: 2px solid var(--or);">
         <div class="card-title" style="color: var(--or);">⏱️ Control de Sesión Inventario</div>
         <div class="status-badge-inv" id="inv-live-status">Estado: Esperando inicio de tandeo</div>
         <div class="inv-control-box">
-          <button class="btn-inv-action" id="btn-start-inv"
-                  onclick="gestionarSesionInventario('INICIAR')"
-                  style="background: var(--vd);">🚀 Iniciar</button>
-          <button class="btn-inv-action" id="btn-stop-inv"
-                  onclick="gestionarSesionInventario('TERMINAR')"
-                  style="background: var(--rj);" disabled>🛑 Terminar</button>
+          <button class="btn-inv-action" id="btn-start-inv" onclick="gestionarSesionInventario('INICIAR')" style="background: var(--vd);">🚀 Iniciar</button>
+          <button class="btn-inv-action" id="btn-stop-inv" onclick="gestionarSesionInventario('TERMINAR')" style="background: var(--rj);" disabled>🛑 Terminar</button>
         </div>
       </div>
-
       <div class="card">
         <div class="card-title">📝 Datos de la Unidad</div>
-
         <div class="row-inputs">
           <div class="form-group">
             <label>Patente (PPU)</label>
-            <input type="text" id="inp-ppu" class="input-text" placeholder="ABCD12"
-                   style="text-transform: uppercase;"
-                   oninput="detectarChasisMaster(this.value)">
+            <input type="text" id="inp-ppu" class="input-text" placeholder="ABCD12" style="text-transform: uppercase;" oninput="detectarChasisMaster(this.value)">
           </div>
           <div class="form-group">
             <label>Contenedor / Chasis</label>
-            <input type="text" id="inp-cont" class="input-text" placeholder="CSXU1234567"
-                   style="text-transform: uppercase;"
-                   oninput="evaluarFlujoContenedorYNaviera(this.value)">
+            <input type="text" id="inp-cont" class="input-text" placeholder="CSXU1234567" style="text-transform: uppercase;" oninput="evaluarFlujoContenedorYNaviera(this.value)">
           </div>
         </div>
-
         <div class="row-inputs">
           <div class="form-group">
             <label>Tipo Chasis</label>
@@ -423,6 +114,11 @@
               <option value="CONTENEDORES 20' Y 40'">3 Ejes Multi (20/40)</option>
               <option value="CORTINA">Cortina</option>
               <option value="FURGON REEFER">Furgón Reefer</option>
+              <option value="FURGON SECO">Furgón Seco</option>
+              <option value="RAMPLA PLANA">Rampla Plana</option>
+              <option value="CAMA BAJA">Cama Baja</option>
+              <option value="DROPDECK">Dropdeck</option>
+              <option value="SEMIRREMOLQUE">Semirremolque</option>
             </select>
             <span id="auto-lbl" class="auto-badge"></span>
           </div>
@@ -431,23 +127,18 @@
             <input type="text" id="inp-cliente" class="input-text" placeholder="Ej: MSC / Medlog">
           </div>
         </div>
-
         <div class="form-group">
           <label>Ubicación en Patio</label>
           <input type="text" id="inp-lugar" class="input-text" placeholder="Ej: Sector A-3 / Taller">
         </div>
-
         <div class="form-group">
           <label>Observaciones</label>
-          <input type="text" id="inp-obs" class="input-text"
-                 placeholder="Ej: Daño en piña derecha, pendiente taller">
+          <input type="text" id="inp-obs" class="input-text" placeholder="Ej: Daño en piña derecha, pendiente taller">
         </div>
-
         <button class="btn-submit" onclick="registrarMovimiento()">Confirmar Movimiento</button>
         <div id="cloud-msg" class="cloud-status"></div>
       </div>
     </div>
-
     <div id="view-patio" class="view">
       <div class="card">
         <div class="card-title">📊 Balance de Turno</div>
@@ -461,7 +152,6 @@
         <div class="bar-chart" id="mov-chart"></div>
       </div>
     </div>
-
     <div id="view-log" class="view">
       <div class="card" style="padding: 12px;">
         <div class="card-title" style="margin-bottom: 8px;">📋 Últimos Movimientos</div>
@@ -469,63 +159,639 @@
         <button class="btn-export" onclick="exportCSV()">Descargar Respaldo CSV</button>
       </div>
     </div>
-
   </div>
-
   <div class="tab-bar">
     <div class="tab-btn active" onclick="switchTab('reg')"><span>📝</span><span>Registrar</span></div>
     <div class="tab-btn" onclick="switchTab('patio')"><span>📊</span><span>Resumen</span></div>
     <div class="tab-btn" onclick="switchTab('log')"><span>📋</span><span>Bitácora</span></div>
   </div>
-
   <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyaTb_uvazW60jXS7eX9Rbv33m9ry0EAZyZDaAnqiLj3yUAi-2uyz5uPn5ymvjGLRrTMw/exec";
-
     const MOV = {
-      E_V: { label: "Entrada Vacío",    bg: "var(--vd)", border: "var(--vd)" },
-      E_F: { label: "Entrada Full",     bg: "var(--vd)", border: "var(--vd)" },
-      S_D: { label: "Salida Depósito",  bg: "var(--am)", border: "var(--am)" },
-      S_C: { label: "Salida Cliente",   bg: "var(--rj)", border: "var(--rj)" },
-      INV: { label: "Inventario Patio", bg: "var(--or)", border: "var(--or)" },
+      E_V: { label: "Entrada Vacío",    bg: "var(--vd)" },
+      E_F: { label: "Entrada Full",     bg: "var(--vd)" },
+      S_D: { label: "Salida Depósito",  bg: "var(--am)" },
+      S_C: { label: "Salida Cliente",   bg: "var(--rj)" },
+      INV: { label: "Inventario Patio", bg: "var(--or)" },
+    };
+    const PREFIJOS_NAVIERAS = {
+      MSCU:"MSC",MEDU:"MSC",ONEU:"ONE",MAEU:"MAERSK",
+      SUDU:"HAMBURG SÜD",COSU:"COSCO",OOLU:"OOCL",
     };
 
-    const BASE_CHASIS_CCTI = {
-      "JK2591": "CONTENEDORES 20'",
-      "GRDY34": "CONTENEDORES 40'",
-      "GRDY35": "CONTENEDORES 40'",
-      "GRDY36": "CONTENEDORES 40'",
-      "GRDY37": "CONTENEDORES 40'",
-      "GRDY38": "CONTENEDORES 40'",
-      "GRDY39": "CONTENEDORES 40'",
-      "PXKS67": "CONTENEDORES 20' Y 40'",
-      "PXKS76": "CONTENEDORES 20' Y 40'",
-      "PXKS86": "CONTENEDORES 20' Y 40'",
-      "PXKS96": "CONTENEDORES 20' Y 40'",
-      "PXKT10": "CONTENEDORES 20' Y 40'",
+        const BASE_CHASIS_CCTI = {
+      "GRDY34": "SEMIRREMOLQUE",
+      "GRDY35": "SEMIRREMOLQUE",
+      "GRDY36": "SEMIRREMOLQUE",
+      "GRDY37": "SEMIRREMOLQUE",
+      "GRDY38": "SEMIRREMOLQUE",
+      "GRDY39": "SEMIRREMOLQUE",
+      "GRDY40": "SEMIRREMOLQUE",
+      "GRDY41": "SEMIRREMOLQUE",
+      "GRDY42": "SEMIRREMOLQUE",
+      "GRDY43": "SEMIRREMOLQUE",
+      "GRDY44": "SEMIRREMOLQUE",
+      "GRDY45": "SEMIRREMOLQUE",
+      "GRDY46": "SEMIRREMOLQUE",
+      "GRDY47": "SEMIRREMOLQUE",
+      "GRDY48": "SEMIRREMOLQUE",
+      "GRDY49": "SEMIRREMOLQUE",
+      "GRDY50": "SEMIRREMOLQUE",
+      "GRDY51": "SEMIRREMOLQUE",
+      "GRDY52": "SEMIRREMOLQUE",
+      "GRDY53": "SEMIRREMOLQUE",
+      "GRDY69": "SEMIRREMOLQUE",
+      "GRDY70": "SEMIRREMOLQUE",
+      "GRDY71": "SEMIRREMOLQUE",
+      "GRDY72": "SEMIRREMOLQUE",
+      "GRDY73": "SEMIRREMOLQUE",
+      "GRDY74": "SEMIRREMOLQUE",
+      "GRDY75": "SEMIRREMOLQUE",
+      "GRDY76": "SEMIRREMOLQUE",
+      "GRDY77": "SEMIRREMOLQUE",
+      "GRDY78": "SEMIRREMOLQUE",
+      "GRFV61": "RAMPLA PLANA",
+      "GRFV62": "RAMPLA PLANA",
+      "GRFV63": "RAMPLA PLANA",
+      "GRJJ54": "CONTENEDORES 20' Y 40'",
+      "GRJJ55": "CONTENEDORES 20' Y 40'",
+      "GRJJ56": "CONTENEDORES 20' Y 40'",
+      "GRJJ57": "CONTENEDORES 20' Y 40'",
+      "GRJJ58": "CONTENEDORES 20' Y 40'",
+      "GRJJ59": "CONTENEDORES 20' Y 40'",
+      "GRJP97": "FURGON SECO",
+      "HGJS44": "CONTENEDORES 20' Y 40'",
+      "HGJS46": "CONTENEDORES 20' Y 40'",
+      "HGJS47": "CONTENEDORES 20' Y 40'",
+      "HGJS71": "CONTENEDORES 20' Y 40'",
+      "HGKP61": "SEMIRREMOLQUE",
+      "HGKP62": "SEMIRREMOLQUE",
+      "HGKP63": "SEMIRREMOLQUE",
+      "HGKP64": "SEMIRREMOLQUE",
+      "HGKP65": "SEMIRREMOLQUE",
+      "HXDJ26": "SEMIRREMOLQUE",
+      "HXDJ27": "SEMIRREMOLQUE",
+      "HXDJ28": "SEMIRREMOLQUE",
+      "HXDJ29": "SEMIRREMOLQUE",
+      "HXDJ30": "SEMIRREMOLQUE",
+      "HXFB13": "FURGON REEFER",
+      "HXFB14": "FURGON REEFER",
+      "HXFB15": "FURGON REEFER",
+      "HXFB16": "FURGON SECO",
+      "HXFB17": "FURGON SECO",
+      "HXFB18": "FURGON SECO",
+      "HXFB19": "FURGON SECO",
+      "HXFB20": "FURGON SECO",
+      "HXFB21": "FURGON SECO",
+      "HXFB22": "FURGON SECO",
+      "HXFB24": "FURGON SECO",
+      "HXFB25": "FURGON SECO",
+      "HXFB32": "FURGON SECO",
+      "HXFV12": "FURGON REEFER",
+      "HXFW77": "CORTINA",
+      "HXFW78": "CORTINA",
+      "HXFX68": "FURGON SECO",
+      "HXFX69": "FURGON SECO",
+      "HXFX70": "FURGON SECO",
+      "HXFX71": "FURGON SECO",
+      "HXFX72": "FURGON SECO",
+      "HXFX73": "SEMIRREMOLQUE",
+      "HXFX74": "SEMIRREMOLQUE",
+      "HXFX75": "SEMIRREMOLQUE",
+      "HXFX76": "SEMIRREMOLQUE",
+      "HXFX77": "SEMIRREMOLQUE",
+      "HXFX78": "SEMIRREMOLQUE",
+      "HXFX79": "SEMIRREMOLQUE",
+      "HXFX80": "SEMIRREMOLQUE",
+      "HXFX81": "SEMIRREMOLQUE",
+      "HXFX82": "SEMIRREMOLQUE",
+      "HXFX83": "SEMIRREMOLQUE",
+      "HXFX84": "SEMIRREMOLQUE",
+      "HXFY11": "CORTINA",
+      "HXFY12": "CORTINA",
+      "HXFY13": "CORTINA",
+      "HXFY14": "CORTINA",
+      "HXFY15": "CORTINA",
+      "HXFY16": "CORTINA",
+      "HXFY17": "CORTINA",
+      "HXFY18": "CORTINA",
+      "HXFY19": "CORTINA",
+      "HXGJ44": "CONTENEDORES 20' Y 40'",
+      "HXGP70": "CORTINA",
+      "HXGS20": "SEMIRREMOLQUE",
+      "HXGS21": "SEMIRREMOLQUE",
+      "HXGS22": "SEMIRREMOLQUE",
+      "HXGS23": "SEMIRREMOLQUE",
+      "HXGS24": "SEMIRREMOLQUE",
+      "HXGS25": "SEMIRREMOLQUE",
+      "HXGS26": "SEMIRREMOLQUE",
+      "HXGS27": "SEMIRREMOLQUE",
+      "HXGS28": "SEMIRREMOLQUE",
+      "HXGS29": "SEMIRREMOLQUE",
+      "HXGS30": "SEMIRREMOLQUE",
+      "HXGS31": "SEMIRREMOLQUE",
+      "HXGS32": "SEMIRREMOLQUE",
+      "HXGS33": "SEMIRREMOLQUE",
+      "HXGS34": "SEMIRREMOLQUE",
+      "HXGS35": "SEMIRREMOLQUE",
+      "HXGS36": "SEMIRREMOLQUE",
+      "HXGS37": "SEMIRREMOLQUE",
+      "HXGS38": "SEMIRREMOLQUE",
+      "HXGS39": "SEMIRREMOLQUE",
+      "HXGS40": "SEMIRREMOLQUE",
+      "HXGS41": "SEMIRREMOLQUE",
+      "HXGS42": "SEMIRREMOLQUE",
+      "HXGS43": "SEMIRREMOLQUE",
+      "HXGS44": "SEMIRREMOLQUE",
+      "HXGS45": "SEMIRREMOLQUE",
+      "HXGS46": "SEMIRREMOLQUE",
+      "HXGS47": "SEMIRREMOLQUE",
+      "HXGS48": "SEMIRREMOLQUE",
+      "HXGS49": "SEMIRREMOLQUE",
+      "HXGS50": "SEMIRREMOLQUE",
+      "HXGS51": "SEMIRREMOLQUE",
+      "HXGS52": "SEMIRREMOLQUE",
+      "HXGS53": "SEMIRREMOLQUE",
+      "HXGS54": "SEMIRREMOLQUE",
+      "HXHB10": "SEMIRREMOLQUE",
+      "HXHB11": "SEMIRREMOLQUE",
+      "HXHB12": "SEMIRREMOLQUE",
+      "HXHB13": "SEMIRREMOLQUE",
+      "HXHB14": "SEMIRREMOLQUE",
+      "HXHB15": "SEMIRREMOLQUE",
+      "HXHB16": "SEMIRREMOLQUE",
+      "HXHB17": "SEMIRREMOLQUE",
+      "HXHB18": "SEMIRREMOLQUE",
+      "HXHB19": "SEMIRREMOLQUE",
+      "HXHB31": "CORTINA",
       "HXHB32": "CORTINA",
+      "HXHB33": "CORTINA",
+      "HXHH38": "RAMPLA PLANA",
+      "HXHH39": "RAMPLA PLANA",
+      "HXHH40": "RAMPLA PLANA",
+      "HXHJ29": "CORTINA",
+      "HXHJ30": "CORTINA",
+      "HXHJ31": "CORTINA",
+      "HXHJ32": "CORTINA",
+      "HXHT27": "CORTINA",
+      "HXHT28": "CORTINA",
+      "HXHT29": "CORTINA",
+      "HXHT30": "CORTINA",
+      "HXHV12": "CONTENEDORES 20'",
+      "HXHV17": "CONTENEDORES 20'",
+      "HXHV19": "CONTENEDORES 20'",
+      "HXHV20": "CONTENEDORES 20'",
+      "HXHV22": "CONTENEDORES 20'",
+      "HXHZ40": "CONTENEDORES 20' Y 40'",
+      "HXHZ41": "CONTENEDORES 20' Y 40'",
+      "HXHZ42": "CONTENEDORES 20' Y 40'",
+      "HXHZ43": "CONTENEDORES 20' Y 40'",
+      "HXHZ44": "CONTENEDORES 20' Y 40'",
+      "HXHZ48": "CONTENEDORES 20' Y 40'",
+      "HXHZ49": "CONTENEDORES 20' Y 40'",
+      "HXHZ50": "CONTENEDORES 20' Y 40'",
+      "JD1204": "RAMPLA PLANA",
+      "JD1221": "RAMPLA PLANA",
+      "JD2239": "RAMPLA PLANA",
+      "JF4472": "RAMPLA PLANA",
+      "JF6388": "FURGON SECO",
+      "JF6391": "FURGON SECO",
+      "JF6588": "FURGON SECO",
+      "JF6590": "FURGON SECO",
+      "JF6642": "FURGON SECO",
+      "JJ2245": "FURGON SECO",
+      "JJ2247": "FURGON SECO",
+      "JJ2248": "SEMIRREMOLQUE",
+      "JJ2249": "SEMIRREMOLQUE",
+      "JK1686": "SEMIRREMOLQUE",
+      "JK1687": "SEMIRREMOLQUE",
+      "JK1688": "SEMIRREMOLQUE",
+      "JK1689": "SEMIRREMOLQUE",
+      "JK1690": "SEMIRREMOLQUE",
+      "JK1691": "SEMIRREMOLQUE",
+      "JK1692": "SEMIRREMOLQUE",
+      "JK1693": "SEMIRREMOLQUE",
+      "JK1694": "SEMIRREMOLQUE",
+      "JK1695": "SEMIRREMOLQUE",
+      "JK1696": "SEMIRREMOLQUE",
+      "JK1697": "SEMIRREMOLQUE",
+      "JK1698": "SEMIRREMOLQUE",
+      "JK1699": "SEMIRREMOLQUE",
+      "JK1700": "SEMIRREMOLQUE",
+      "JK1701": "SEMIRREMOLQUE",
+      "JK1702": "SEMIRREMOLQUE",
+      "JK1703": "SEMIRREMOLQUE",
+      "JK1704": "SEMIRREMOLQUE",
+      "JK1705": "SEMIRREMOLQUE",
+      "JK1707": "SEMIRREMOLQUE",
+      "JK1708": "SEMIRREMOLQUE",
+      "JK1709": "SEMIRREMOLQUE",
+      "JK1710": "SEMIRREMOLQUE",
+      "JK1711": "SEMIRREMOLQUE",
+      "JK1712": "SEMIRREMOLQUE",
+      "JK1713": "SEMIRREMOLQUE",
+      "JK1714": "SEMIRREMOLQUE",
+      "JK1715": "SEMIRREMOLQUE",
+      "JK1716": "SEMIRREMOLQUE",
+      "JK1717": "SEMIRREMOLQUE",
+      "JK1718": "SEMIRREMOLQUE",
+      "JK1719": "SEMIRREMOLQUE",
+      "JK1721": "SEMIRREMOLQUE",
+      "JK1722": "SEMIRREMOLQUE",
+      "JK1723": "SEMIRREMOLQUE",
+      "JK1724": "SEMIRREMOLQUE",
+      "JK1726": "SEMIRREMOLQUE",
+      "JK1727": "SEMIRREMOLQUE",
+      "JK1728": "SEMIRREMOLQUE",
+      "JK1729": "SEMIRREMOLQUE",
+      "JK1730": "SEMIRREMOLQUE",
+      "JK1731": "SEMIRREMOLQUE",
+      "JK1732": "SEMIRREMOLQUE",
+      "JK1733": "SEMIRREMOLQUE",
+      "JK1734": "SEMIRREMOLQUE",
+      "JK1735": "SEMIRREMOLQUE",
+      "JK1736": "SEMIRREMOLQUE",
+      "JK1737": "SEMIRREMOLQUE",
+      "JK2591": "SEMIRREMOLQUE",
+      "JK2592": "SEMIRREMOLQUE",
+      "JK2593": "SEMIRREMOLQUE",
+      "JK2594": "SEMIRREMOLQUE",
+      "JK2595": "SEMIRREMOLQUE",
+      "JK2596": "SEMIRREMOLQUE",
+      "JK2597": "SEMIRREMOLQUE",
+      "JK2598": "SEMIRREMOLQUE",
+      "JK2599": "SEMIRREMOLQUE",
+      "JK2600": "SEMIRREMOLQUE",
+      "JK2602": "SEMIRREMOLQUE",
+      "JK2603": "SEMIRREMOLQUE",
+      "JK2604": "SEMIRREMOLQUE",
+      "JK2605": "SEMIRREMOLQUE",
+      "JK2606": "SEMIRREMOLQUE",
+      "JK2607": "SEMIRREMOLQUE",
+      "JK2608": "SEMIRREMOLQUE",
+      "JK2609": "SEMIRREMOLQUE",
+      "JK2610": "SEMIRREMOLQUE",
+      "JK2611": "SEMIRREMOLQUE",
+      "JK2612": "SEMIRREMOLQUE",
+      "JK2613": "SEMIRREMOLQUE",
+      "JK2614": "SEMIRREMOLQUE",
+      "JK2615": "SEMIRREMOLQUE",
+      "JK2616": "SEMIRREMOLQUE",
+      "JK2617": "SEMIRREMOLQUE",
+      "JK2618": "SEMIRREMOLQUE",
+      "JK5735": "SEMIRREMOLQUE",
+      "JK5736": "SEMIRREMOLQUE",
+      "JK5737": "SEMIRREMOLQUE",
+      "JK5738": "SEMIRREMOLQUE",
+      "JK5739": "SEMIRREMOLQUE",
+      "JK5740": "SEMIRREMOLQUE",
+      "JK5741": "SEMIRREMOLQUE",
+      "JK5742": "SEMIRREMOLQUE",
+      "JK5747": "RAMPLA PLANA",
+      "JK5749": "RAMPLA PLANA",
+      "JL3512": "CORTINA",
+      "JL3676": "FURGON SECO",
+      "JL3677": "FURGON SECO",
+      "JL3678": "FURGON SECO",
+      "JL5817": "RAMPLA PLANA",
+      "JL6362": "SEMIRREMOLQUE",
+      "JL6363": "SEMIRREMOLQUE",
+      "JL6364": "SEMIRREMOLQUE",
+      "JL6365": "SEMIRREMOLQUE",
+      "JL6366": "SEMIRREMOLQUE",
+      "JL6367": "SEMIRREMOLQUE",
+      "JL6368": "SEMIRREMOLQUE",
+      "JL6369": "SEMIRREMOLQUE",
+      "JL6370": "SEMIRREMOLQUE",
+      "JL6371": "SEMIRREMOLQUE",
+      "JL6372": "SEMIRREMOLQUE",
+      "JL9320": "SEMIRREMOLQUE",
+      "JL9321": "SEMIRREMOLQUE",
+      "JL9322": "SEMIRREMOLQUE",
+      "JL9323": "SEMIRREMOLQUE",
+      "JL9324": "SEMIRREMOLQUE",
+      "JL9325": "SEMIRREMOLQUE",
+      "JL9717": "SEMIRREMOLQUE",
+      "JL9718": "SEMIRREMOLQUE",
+      "JL9719": "SEMIRREMOLQUE",
+      "JL9720": "SEMIRREMOLQUE",
+      "JL9753": "DROPDECK",
+      "JN6564": "RAMPLA PLANA",
+      "JN6713": "SEMIRREMOLQUE",
+      "JN6714": "SEMIRREMOLQUE",
+      "JN6716": "SEMIRREMOLQUE",
+      "JN6717": "SEMIRREMOLQUE",
+      "JN6718": "SEMIRREMOLQUE",
+      "JN6719": "SEMIRREMOLQUE",
+      "JN6742": "FURGON SECO",
+      "JN6743": "FURGON SECO",
+      "JN6749": "SEMIRREMOLQUE",
+      "JN6750": "SEMIRREMOLQUE",
+      "JN6751": "SEMIRREMOLQUE",
+      "JN6752": "SEMIRREMOLQUE",
+      "JN6753": "SEMIRREMOLQUE",
+      "JN6754": "SEMIRREMOLQUE",
+      "JN8768": "SEMIRREMOLQUE",
+      "JN8819": "SEMIRREMOLQUE",
+      "JN8833": "SEMIRREMOLQUE",
+      "JP1209": "CORTINA",
+      "JP1210": "CORTINA",
+      "JP1211": "CORTINA",
+      "JP1212": "CORTINA",
+      "JP1213": "CORTINA",
+      "JP2722": "SEMIRREMOLQUE",
+      "JP2723": "SEMIRREMOLQUE",
+      "JP2724": "SEMIRREMOLQUE",
+      "JP2725": "SEMIRREMOLQUE",
+      "JP2726": "SEMIRREMOLQUE",
+      "JP2727": "SEMIRREMOLQUE",
+      "JP2728": "SEMIRREMOLQUE",
+      "JP2729": "SEMIRREMOLQUE",
+      "JP2730": "SEMIRREMOLQUE",
+      "JP2731": "SEMIRREMOLQUE",
+      "JP2732": "SEMIRREMOLQUE",
+      "JP2733": "SEMIRREMOLQUE",
+      "JP2738": "SEMIRREMOLQUE",
+      "JP2739": "SEMIRREMOLQUE",
+      "JP2740": "SEMIRREMOLQUE",
+      "JP2741": "SEMIRREMOLQUE",
+      "JP2742": "SEMIRREMOLQUE",
+      "JP2743": "SEMIRREMOLQUE",
+      "JP2744": "SEMIRREMOLQUE",
+      "JP2745": "SEMIRREMOLQUE",
+      "JP2746": "SEMIRREMOLQUE",
+      "JP2747": "SEMIRREMOLQUE",
+      "JP2748": "SEMIRREMOLQUE",
+      "JP2749": "SEMIRREMOLQUE",
+      "JP2750": "SEMIRREMOLQUE",
+      "JP2751": "SEMIRREMOLQUE",
+      "JP2752": "SEMIRREMOLQUE",
+      "JP2753": "SEMIRREMOLQUE",
+      "JP2754": "SEMIRREMOLQUE",
+      "JP2755": "SEMIRREMOLQUE",
+      "JP2796": "RAMPLA PLANA",
+      "JP2797": "RAMPLA PLANA",
+      "JP2798": "RAMPLA PLANA",
+      "JP2799": "RAMPLA PLANA",
+      "JP2800": "RAMPLA PLANA",
+      "JP3036": "CORTINA",
+      "JP3037": "CORTINA",
+      "JP3038": "CORTINA",
+      "JP3039": "CORTINA",
+      "JP4813": "CORTINA",
+      "JWPP86": "SEMIRREMOLQUE",
+      "JWPP87": "SEMIRREMOLQUE",
+      "JWPP88": "SEMIRREMOLQUE",
+      "JWPP89": "SEMIRREMOLQUE",
+      "JWPP90": "SEMIRREMOLQUE",
+      "JWPP91": "SEMIRREMOLQUE",
+      "JWPP92": "SEMIRREMOLQUE",
+      "JWPP93": "SEMIRREMOLQUE",
+      "JWPP94": "SEMIRREMOLQUE",
+      "JWPP95": "SEMIRREMOLQUE",
+      "JWPP96": "SEMIRREMOLQUE",
+      "JWPP97": "SEMIRREMOLQUE",
+      "JWPP98": "SEMIRREMOLQUE",
+      "JWPP99": "SEMIRREMOLQUE",
+      "JWPV10": "SEMIRREMOLQUE",
+      "JWPV11": "SEMIRREMOLQUE",
+      "JWPV12": "SEMIRREMOLQUE",
+      "JWPW46": "CONTENEDORES 40'",
+      "JWPW47": "CONTENEDORES 40'",
+      "JWPW48": "CONTENEDORES 40'",
+      "JWPW49": "CONTENEDORES 40'",
+      "JWPW50": "CONTENEDORES 40'",
+      "JWPW51": "CONTENEDORES 40'",
+      "JWPW52": "CONTENEDORES 40'",
+      "JWPW53": "CONTENEDORES 40'",
+      "JWPW54": "CONTENEDORES 40'",
+      "JWPW55": "CONTENEDORES 40'",
+      "JWPW56": "CONTENEDORES 40'",
+      "JWPW57": "CONTENEDORES 40'",
+      "JWPW58": "CONTENEDORES 40'",
+      "JWPW59": "CONTENEDORES 40'",
+      "JWPW60": "CONTENEDORES 40'",
+      "JWPW61": "CONTENEDORES 40'",
+      "JWPW62": "CONTENEDORES 40'",
+      "JWPW63": "CONTENEDORES 40'",
+      "JWPW64": "CONTENEDORES 40'",
+      "JWPW65": "CONTENEDORES 40'",
+      "JWPW66": "CONTENEDORES 40'",
+      "JWPW67": "CONTENEDORES 40'",
+      "JWPW68": "CONTENEDORES 40'",
+      "JWPW69": "CONTENEDORES 40'",
+      "JWPW70": "CONTENEDORES 40'",
+      "JWPW71": "CONTENEDORES 40'",
+      "JWPW72": "CONTENEDORES 40'",
+      "JWPW73": "CONTENEDORES 40'",
+      "JWPW74": "CONTENEDORES 40'",
+      "JWPW75": "CONTENEDORES 40'",
+      "JWPW76": "CONTENEDORES 40'",
+      "JWPW77": "CONTENEDORES 40'",
+      "JWPW78": "CONTENEDORES 40'",
+      "JWPW79": "CONTENEDORES 40'",
+      "JWPW80": "CONTENEDORES 40'",
+      "JWPW81": "CONTENEDORES 40'",
+      "JWPW82": "CONTENEDORES 40'",
+      "JWPW83": "CONTENEDORES 40'",
+      "JWPW84": "CONTENEDORES 40'",
+      "JWPW85": "CONTENEDORES 40'",
+      "KDGX14": "CORTINA",
+      "KDGX15": "CORTINA",
+      "KDHG96": "CONTENEDORES 20' Y 40'",
+      "KDHG97": "CONTENEDORES 20' Y 40'",
+      "KDHG98": "CONTENEDORES 20' Y 40'",
+      "KDHS54": "CONTENEDORES 20'",
+      "KDHS55": "CONTENEDORES 20'",
+      "KDHS56": "CONTENEDORES 20'",
+      "KDHS57": "CONTENEDORES 20'",
+      "KDHS58": "CONTENEDORES 20'",
+      "KDHS59": "CONTENEDORES 20'",
+      "KDHS60": "CONTENEDORES 20'",
+      "KDHS61": "CONTENEDORES 20'",
+      "KDHS65": "CONTENEDORES 20'",
+      "KDHS66": "CONTENEDORES 20'",
+      "KDHS70": "CONTENEDORES 20'",
+      "KDHS73": "CONTENEDORES 20'",
+      "KDHS74": "CONTENEDORES 20'",
+      "KDJT64": "CONTENEDORES 20' Y 40'",
+      "KDKY84": "CONTENEDORES 40'",
+      "KDKY85": "CONTENEDORES 40'",
+      "KYPB87": "CONTENEDORES 20' Y 40'",
+      "KYPB88": "CONTENEDORES 20' Y 40'",
+      "KYPB89": "CONTENEDORES 20' Y 40'",
+      "KYPB90": "CONTENEDORES 20' Y 40'",
+      "KYPB91": "CONTENEDORES 20' Y 40'",
+      "KYPB92": "CONTENEDORES 20' Y 40'",
+      "KYPB93": "CONTENEDORES 20' Y 40'",
+      "KYPB94": "CONTENEDORES 20' Y 40'",
+      "KYPB95": "CONTENEDORES 20' Y 40'",
+      "KYPB96": "CONTENEDORES 20' Y 40'",
+      "KYPB97": "CORTINA",
+      "KYPB98": "CORTINA",
+      "KYPB99": "CORTINA",
+      "KYPR88": "CORTINA",
+      "KYPR89": "CORTINA",
+      "KYPR90": "CORTINA",
+      "KYPR91": "CORTINA",
+      "KYPR92": "CORTINA",
+      "KYPR93": "CORTINA",
+      "KYPR94": "CORTINA",
+      "KYPR95": "CORTINA",
+      "KYPR96": "CORTINA",
       "KYPR97": "CORTINA",
+      "KYPR98": "CORTINA",
+      "KYPR99": "CORTINA",
+      "KYPT28": "CORTINA",
+      "KYPT29": "CORTINA",
+      "KYPT30": "CORTINA",
+      "KYPW43": "CORTINA",
+      "KYPW44": "CORTINA",
+      "KYPW45": "CORTINA",
+      "KYPW46": "CORTINA",
+      "KYPW47": "CORTINA",
+      "KYPW48": "CORTINA",
+      "KYPW49": "CORTINA",
+      "KYPW50": "CORTINA",
+      "KYPW51": "CORTINA",
+      "KYPW52": "CORTINA",
+      "KYPW53": "CORTINA",
+      "KYPW63": "CORTINA",
+      "KYRF28": "CORTINA",
+      "KYRF29": "CORTINA",
+      "KYRF83": "CORTINA",
+      "KYRF84": "CORTINA",
+      "KYRF85": "CORTINA",
+      "KYRF86": "CORTINA",
+      "PTYK64": "CONTENEDORES 20' Y 40'",
+      "PTYP91": "CONTENEDORES 20' Y 40'",
+      "PTYP92": "CONTENEDORES 20' Y 40'",
+      "PTYP93": "CONTENEDORES 20' Y 40'",
+      "PTYP94": "CONTENEDORES 20' Y 40'",
+      "PTYP95": "CONTENEDORES 20' Y 40'",
+      "PTYP96": "CONTENEDORES 20' Y 40'",
+      "PTYP97": "CONTENEDORES 20' Y 40'",
+      "PTYP98": "CONTENEDORES 20' Y 40'",
+      "PTYP99": "CONTENEDORES 20' Y 40'",
+      "PTYR13": "CORTINA",
+      "PTYR14": "CORTINA",
+      "PTYR15": "CORTINA",
+      "PWPW46": "SEMIRREMOLQUE",
+      "PWPW47": "SEMIRREMOLQUE",
+      "PWPW48": "SEMIRREMOLQUE",
+      "PWPW49": "SEMIRREMOLQUE",
+      "PWPW50": "SEMIRREMOLQUE",
+      "PWPW51": "SEMIRREMOLQUE",
+      "PWPW52": "SEMIRREMOLQUE",
+      "PWPW53": "SEMIRREMOLQUE",
+      "PWPW54": "SEMIRREMOLQUE",
+      "PWPW55": "SEMIRREMOLQUE",
+      "PWPW56": "SEMIRREMOLQUE",
+      "PWPW57": "SEMIRREMOLQUE",
+      "PWPW58": "SEMIRREMOLQUE",
+      "PWPW59": "SEMIRREMOLQUE",
+      "PWPW60": "SEMIRREMOLQUE",
+      "PWPW61": "SEMIRREMOLQUE",
+      "PWPW62": "SEMIRREMOLQUE",
+      "PWPW63": "SEMIRREMOLQUE",
+      "PWPW64": "SEMIRREMOLQUE",
+      "PWPW65": "SEMIRREMOLQUE",
+      "PWPW66": "SEMIRREMOLQUE",
+      "PWPW67": "SEMIRREMOLQUE",
+      "PWPW68": "SEMIRREMOLQUE",
+      "PWPW69": "SEMIRREMOLQUE",
+      "PWPW70": "SEMIRREMOLQUE",
+      "PWPW71": "SEMIRREMOLQUE",
+      "PWPW72": "SEMIRREMOLQUE",
+      "PWPW73": "SEMIRREMOLQUE",
+      "PWPW74": "SEMIRREMOLQUE",
+      "PWPW75": "SEMIRREMOLQUE",
+      "PWPW76": "SEMIRREMOLQUE",
+      "PWPW77": "SEMIRREMOLQUE",
+      "PWPW78": "SEMIRREMOLQUE",
+      "PWPW79": "SEMIRREMOLQUE",
+      "PWPW80": "SEMIRREMOLQUE",
+      "PWPW81": "SEMIRREMOLQUE",
+      "PWPW82": "SEMIRREMOLQUE",
+      "PWPW83": "SEMIRREMOLQUE",
+      "PWPW84": "SEMIRREMOLQUE",
+      "PWPW85": "SEMIRREMOLQUE",
+      "PWSH10": "CONTENEDORES 20' Y 40'",
+      "PWSH13": "CORTINA",
+      "PWSS76": "CONTENEDORES 20' Y 40'",
+      "PWSS86": "CONTENEDORES 20' Y 40'",
+      "PWSS88": "CONTENEDORES 20' Y 40'",
+      "PWSS92": "CONTENEDORES 20' Y 40'",
+      "PWSS93": "CONTENEDORES 20' Y 40'",
+      "PWTB54": "CONTENEDORES 20' Y 40'",
+      "PWTT20": "CONTENEDORES 20' Y 40'",
+      "PWTT23": "CONTENEDORES 20' Y 40'",
+      "PWTT27": "CONTENEDORES 20' Y 40'",
+      "PWXD32": "RAMPLA PLANA",
+      "PWXD35": "RAMPLA PLANA",
+      "PWXD49": "RAMPLA PLANA",
+      "PWXD66": "CONTENEDORES 20'",
       "PWYL65": "CORTINA",
       "PWYL67": "CORTINA",
       "PWYL68": "CORTINA",
       "PWYL69": "CORTINA",
       "PWYL70": "CORTINA",
       "PWYL72": "CORTINA",
-      "HXHT27": "CORTINA",
-      "HXHT28": "CORTINA",
-      "HXHT29": "CORTINA",
-      "HXHT30": "CORTINA",
-      "HXFB13": "FURGON REEFER",
+      "PWYL73": "CORTINA",
+      "PWYW70": "RAMPLA PLANA",
+      "PWYW71": "RAMPLA PLANA",
+      "PWYW72": "RAMPLA PLANA",
+      "PWYW73": "RAMPLA PLANA",
+      "PWYW74": "RAMPLA PLANA",
+      "PWYW75": "RAMPLA PLANA",
+      "PWYW76": "RAMPLA PLANA",
+      "PWYW77": "RAMPLA PLANA",
+      "PWYW78": "RAMPLA PLANA",
+      "PWYW96": "CONTENEDORES 20'",
+      "PWYW97": "CONTENEDORES 20'",
+      "PWYW98": "CONTENEDORES 20'",
+      "PWYW99": "CONTENEDORES 20'",
+      "PWZC71": "RAMPLA PLANA",
+      "PWZC72": "RAMPLA PLANA",
+      "PWZR41": "RAMPLA PLANA",
+      "PWZR42": "RAMPLA PLANA",
+      "PWZR43": "RAMPLA PLANA",
+      "PWZR44": "RAMPLA PLANA",
+      "PWZR45": "RAMPLA PLANA",
+      "PXCF21": "RAMPLA PLANA",
+      "PXCF22": "RAMPLA PLANA",
+      "PXCF30": "RAMPLA PLANA",
+      "PXCT22": "CAMA BAJA",
+      "PXDL72": "FURGON SECO",
+      "PXDL73": "FURGON SECO",
+      "PXDL80": "FURGON SECO",
+      "PXDL81": "FURGON SECO",
+      "PXHZ40": "CONTENEDORES 20' Y 40'",
+      "PXHZ55": "CONTENEDORES 20' Y 40'",
+      "PXHZ56": "CONTENEDORES 20' Y 40'",
+      "PXHZ58": "CONTENEDORES 20' Y 40'",
+      "PXHZ67": "CONTENEDORES 20' Y 40'",
+      "PXHZ68": "CONTENEDORES 20' Y 40'",
+      "PXHZ76": "CONTENEDORES 20' Y 40'",
+      "PXHZ86": "CONTENEDORES 20' Y 40'",
+      "PXKS39": "CONTENEDORES 20' Y 40'",
+      "PXKS48": "CONTENEDORES 20' Y 40'",
+      "PXKS58": "CONTENEDORES 20' Y 40'",
+      "PXKS67": "CONTENEDORES 20' Y 40'",
+      "PXKS76": "CONTENEDORES 20' Y 40'",
+      "PXKS86": "CONTENEDORES 20' Y 40'",
+      "PXKS96": "CONTENEDORES 20' Y 40'",
+      "PXKT10": "CONTENEDORES 20' Y 40'",
+      "PXKT14": "CONTENEDORES 20' Y 40'",
+      "PXKT31": "CONTENEDORES 20' Y 40'",
+      "PXKT72": "CONTENEDORES 20' Y 40'",
+      "PXKT84": "CONTENEDORES 20' Y 40'",
+      "PXKT96": "CONTENEDORES 20' Y 40'",
+      "PXKV18": "CONTENEDORES 20' Y 40'",
+      "PXKV28": "CONTENEDORES 20' Y 40'"
     };
-
-    const PREFIJOS_NAVIERAS = {
-      MSCU: "MSC", MEDU: "MSC", ONEU: "ONE", MAEU: "MAERSK",
-      SUDU: "HAMBURG SÜD", COSU: "COSCO", OOLU: "OOCL",
-    };
-
     let selectedMov = null;
     let bitacora = JSON.parse(localStorage.getItem("ccti_bitacora")) || [];
-    
-    // MEJORA SEGUIDAD: Persistir datos críticos de tandeo en LocalStorage para resistir recargas accidentales
     let esInventarioActivo = localStorage.getItem("ccti_inv_activo") === "true";
     let marcaTiempoInicioInv = localStorage.getItem("ccti_inv_inicio") ? new Date(localStorage.getItem("ccti_inv_inicio")) : null;
     let historialPatentesEnSesion = JSON.parse(localStorage.getItem("ccti_inv_patentes")) || [];
@@ -537,52 +803,30 @@
           document.querySelectorAll(".btn-mov").forEach((b) => b.classList.remove("active"));
           btn.classList.add('active');
           selectedMov = btn.getAttribute("data-type");
-
-          const panelCronometro = document.getElementById("panel-cronometro-inv");
-          panelCronometro.style.display = selectedMov === "INV" ? "block" : "none";
+          document.getElementById("panel-cronometro-inv").style.display = selectedMov === "INV" ? "block" : "none";
         });
       });
-
       const d = new Date();
-      const opcionesFecha = { weekday: "long", day: "numeric", month: "long" };
-      document.getElementById("nav-date").innerHTML = "CCTI S.A. — " + d.toLocaleDateString("es-ES", opcionesFecha);
-
-      // Si había un inventario corriendo antes del refresh, restaurar la interfaz al tiro
-      if (esInventarioActivo && marcaTiempoInicioInv) {
-        restaurarInterfazInventario();
-      }
-
-      if (ultimaUbicacionGuardada) {
-        document.getElementById("inp-lugar").value = ultimaUbicacionGuardada;
-      }
-
+      document.getElementById("nav-date").innerHTML = "CCTI S.A. — " + d.toLocaleDateString("es-ES", { weekday:"long", day:"numeric", month:"long" });
+      if (esInventarioActivo && marcaTiempoInicioInv) restaurarInterfazInventario();
+      if (ultimaUbicacionGuardada) document.getElementById("inp-lugar").value = ultimaUbicacionGuardada;
       actualizarGraficos();
     });
 
     function detectarChasisMaster(valor) {
-      if (!valor) {
-        document.getElementById("auto-lbl").innerText = "";
-        document.getElementById("inp-obs").value = "";
-        return;
-      }
-
-      const ppuClean = valor.replace(/[^a-zA-Z0-9]/g, "").trim().toUpperCase();
+      if (!valor) { document.getElementById("auto-lbl").innerText = ""; document.getElementById("inp-obs").value = ""; return; }
+      const ppuClean = valor.replace(/[^a-zA-Z0-9]/g,"").trim().toUpperCase();
       document.getElementById("inp-ppu").value = ppuClean;
-
       const selectChasis = document.getElementById("inp-chasis");
       const lblAuto = document.getElementById("auto-lbl");
-
       if (esInventarioActivo && historialPatentesEnSesion.includes(ppuClean)) {
-        alert(`⚠️ REGISTRO DUPLICADO BLOQUEADO:\nLa patente ${ppuClean} ya fue ingresada durante la sesión de inventario en curso.`);
-        document.getElementById("inp-ppu").value = "";
-        lblAuto.innerText = "";
-        return;
+        alert("⚠️ REGISTRO DUPLICADO BLOQUEADO:\nLa patente " + ppuClean + " ya fue ingresada durante la sesión de inventario en curso.");
+        document.getElementById("inp-ppu").value = ""; lblAuto.innerText = ""; return;
       }
-
       if (BASE_CHASIS_CCTI[ppuClean]) {
         const chasisAsignado = BASE_CHASIS_CCTI[ppuClean];
         selectChasis.value = chasisAsignado;
-        lblAuto.innerText = `⚡ Reconocido: ${chasisAsignado}`;
+        lblAuto.innerText = "⚡ Reconocido: " + chasisAsignado;
         lblAuto.style.color = "var(--vd)";
         evaluarFlujoContenedorYNaviera(document.getElementById("inp-cont").value);
       } else {
@@ -596,22 +840,15 @@
       const txtObs = document.getElementById("inp-obs");
       const inputCliente = document.getElementById("inp-cliente");
       const inputCont = document.getElementById("inp-cont");
-
-      const contClean = valorContenedor.replace(/[^a-zA-Z0-9]/g, "").trim().toUpperCase();
+      const contClean = valorContenedor.replace(/[^a-zA-Z0-9]/g,"").trim().toUpperCase();
       inputCont.value = contClean;
-
       if (!ppu) return;
-
-      if (contClean === "") {
-        txtObs.value = "DISPONIBLE";
-      } else {
+      if (contClean === "") { txtObs.value = "DISPONIBLE"; }
+      else {
         txtObs.value = "OCUPADO";
-
         if (contClean.length >= 4) {
-          const prefijo = contClean.substring(0, 4);
-          if (PREFIJOS_NAVIERAS[prefijo]) {
-            inputCliente.value = PREFIJOS_NAVIERAS[prefijo];
-          }
+          const prefijo = contClean.substring(0,4);
+          if (PREFIJOS_NAVIERAS[prefijo]) inputCliente.value = PREFIJOS_NAVIERAS[prefijo];
         }
       }
     }
@@ -620,235 +857,113 @@
       const lblStatus = document.getElementById("inv-live-status");
       const btnStart = document.getElementById("btn-start-inv");
       const btnStop = document.getElementById("btn-stop-inv");
-
       if (estado === "INICIAR") {
-        esInventarioActivo = true;
-        marcaTiempoInicioInv = new Date();
-        historialPatentesEnSesion = [];
-
-        localStorage.setItem("ccti_inv_activo", "true");
-        localStorage.setItem("ccti_inv_inicio", marcaTiempoInicioInv.toISOString());
-        localStorage.setItem("ccti_inv_patentes", JSON.stringify([]));
-
+        esInventarioActivo = true; marcaTiempoInicioInv = new Date(); historialPatentesEnSesion = [];
+        localStorage.setItem("ccti_inv_activo","true");
+        localStorage.setItem("ccti_inv_inicio",marcaTiempoInicioInv.toISOString());
+        localStorage.setItem("ccti_inv_patentes",JSON.stringify([]));
         restaurarInterfazInventario();
       } else if (estado === "TERMINAR") {
         esInventarioActivo = false;
-        const finInv = new Date();
-        const difMs = finInv - marcaTiempoInicioInv;
-        const mins = Math.floor(difMs / 60000);
-        const segs = Math.floor((difMs % 60000) / 1000);
-
-        localStorage.removeItem("ccti_inv_activo");
-        localStorage.removeItem("ccti_inv_inicio");
-        localStorage.removeItem("ccti_inv_patentes");
-
+        const finInv = new Date(); const difMs = finInv - marcaTiempoInicioInv;
+        const mins = Math.floor(difMs/60000); const segs = Math.floor((difMs%60000)/1000);
+        localStorage.removeItem("ccti_inv_activo"); localStorage.removeItem("ccti_inv_inicio"); localStorage.removeItem("ccti_inv_patentes");
         lblStatus.innerText = "🟢 Estado: Esperando inicio de tandeo";
-        lblStatus.style.background = "var(--gr)";
-        lblStatus.style.color = "var(--txt2)";
-        btnStart.disabled = false;
-        btnStop.disabled = true;
-
-        alert(`📋 Toma de Inventario Finalizada con Éxito.\n\n⏱️ Duración: ${mins} min ${segs} seg.\n🚚 Unidades Validadas en Patio: ${historialPatentesEnSesion.length}`);
+        lblStatus.style.background = "var(--gr)"; lblStatus.style.color = "var(--txt2)";
+        btnStart.disabled = false; btnStop.disabled = true;
+        alert("📋 Toma de Inventario Finalizada.\n\n⏱️ Duración: " + mins + " min " + segs + " seg.\n🚚 Unidades: " + historialPatentesEnSesion.length);
       }
     }
 
     function restaurarInterfazInventario() {
-      const lblStatus = document.getElementById("inv-live-status");
-      const btnStart = document.getElementById("btn-start-inv");
-      const btnStop = document.getElementById("btn-stop-inv");
       const tiempoStr = new Date(marcaTiempoInicioInv).toLocaleTimeString();
-      
-      lblStatus.innerText = `⚠️ EN PROCESO — Iniciado a las: ${tiempoStr}`;
-      lblStatus.style.background = "var(--or-l)";
-      lblStatus.style.color = "var(--or)";
-      btnStart.disabled = true;
-      btnStop.disabled = false;
+      document.getElementById("inv-live-status").innerText = "⚠️ EN PROCESO — Iniciado a las: " + tiempoStr;
+      document.getElementById("inv-live-status").style.background = "var(--or-l)";
+      document.getElementById("inv-live-status").style.color = "var(--or)";
+      document.getElementById("btn-start-inv").disabled = true;
+      document.getElementById("btn-stop-inv").disabled = false;
     }
 
     function switchTab(tab) {
       document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
       document.querySelectorAll(".view").forEach((v) => v.classList.remove("active"));
-
-      const idx = ["reg", "patio", "log"].indexOf(tab);
+      const idx = ["reg","patio","log"].indexOf(tab);
       document.querySelectorAll(".tab-btn")[idx].classList.add("active");
-      document.getElementById("view-" + tab).classList.add("active");
-
+      document.getElementById("view-"+tab).classList.add("active");
       if (tab === "patio" || tab === "log") actualizarGraficos();
     }
 
     function registrarMovimiento() {
-      if (!selectedMov) {
-        alert("Por favor, selecciona un tipo de movimiento");
-        return;
-      }
-
+      if (!selectedMov) { alert("Por favor, selecciona un tipo de movimiento"); return; }
       const ppu = document.getElementById("inp-ppu").value.trim().toUpperCase();
       const cont = document.getElementById("inp-cont").value.trim().toUpperCase();
       const tipo_chasis = document.getElementById("inp-chasis").value;
       const cliente = document.getElementById("inp-cliente").value.trim();
       const lugar = document.getElementById("inp-lugar").value.trim();
       const obs = document.getElementById("inp-obs").value.trim();
-
-      if (!ppu) {
-        alert("La patente (PPU) es obligatoria");
-        return;
-      }
-
-      if (esInventarioActivo && historialPatentesEnSesion.includes(ppu)) {
-        alert(`Error: La patente ${ppu} es un duplicado en esta ventana de inventario.`);
-        return;
-      }
-
+      if (!ppu) { alert("La patente (PPU) es obligatoria"); return; }
+      if (esInventarioActivo && historialPatentesEnSesion.includes(ppu)) { alert("Error: La patente " + ppu + " es un duplicado."); return; }
       const ts = new Date().toLocaleString("es-CL");
-
-      const registro = {
-        ts,
-        tipo: selectedMov,
-        ppu,
-        cont: cont || "N/A",
-        tipo_chasis: tipo_chasis || "NO DEFINIDO",
-        cliente: cliente || "N/A",
-        lugar: lugar || "N/A",
-        obs: obs || "N/A",
-      };
-
-      if (esInventarioActivo) {
-        historialPatentesEnSesion.push(ppu);
-        localStorage.setItem("ccti_inv_patentes", JSON.stringify(historialPatentesEnSesion));
-      }
-
-      ultimaUbicacionGuardada = lugar;
-      localStorage.setItem("ccti_ultima_ub", ultimaUbicacionGuardada);
-
-      bitacora.unshift(registro);
-      localStorage.setItem("ccti_bitacora", JSON.stringify(bitacora));
-
+      const registro = { ts, tipo: selectedMov, ppu, cont: cont||"N/A", tipo_chasis: tipo_chasis||"NO DEFINIDO", cliente: cliente||"N/A", lugar: lugar||"N/A", obs: obs||"N/A" };
+      if (esInventarioActivo) { historialPatentesEnSesion.push(ppu); localStorage.setItem("ccti_inv_patentes", JSON.stringify(historialPatentesEnSesion)); }
+      ultimaUbicacionGuardada = lugar; localStorage.setItem("ccti_ultima_ub", ultimaUbicacionGuardada);
+      bitacora.unshift(registro); localStorage.setItem("ccti_bitacora", JSON.stringify(bitacora));
       enviarACloud(registro);
-
-      document.getElementById("inp-ppu").value = "";
-      document.getElementById("inp-cont").value = "";
-      document.getElementById("inp-cliente").value = "";
-      document.getElementById("inp-obs").value = "";
-      document.getElementById("auto-lbl").innerText = "";
-      document.getElementById("inp-chasis").selectedIndex = 0;
+      document.getElementById("inp-ppu").value = ""; document.getElementById("inp-cont").value = "";
+      document.getElementById("inp-cliente").value = ""; document.getElementById("inp-obs").value = "";
+      document.getElementById("auto-lbl").innerText = ""; document.getElementById("inp-chasis").selectedIndex = 0;
       document.getElementById("inp-lugar").value = ultimaUbicacionGuardada;
-
-      selectedMov = null;
-      document.querySelectorAll(".btn-mov").forEach((b) => b.classList.remove("active"));
+      selectedMov = null; document.querySelectorAll(".btn-mov").forEach((b) => b.classList.remove("active"));
       document.getElementById("panel-cronometro-inv").style.display = "none";
-
-      alert("¡Movimiento guardado con éxito!");
-      actualizarGraficos();
+      alert("¡Movimiento guardado con éxito!"); actualizarGraficos();
     }
 
     function enviarACloud(item) {
       const msgBox = document.getElementById("cloud-msg");
-      msgBox.className = "cloud-status syncing";
-      msgBox.innerText = "⏳ Sincronizando con la oficina en línea...";
-
-      const payload = {
-        ts: item.ts,
-        movimiento: MOV[item.tipo]?.label || item.tipo,
-        ppu: item.ppu,
-        contenedor: item.cont,
-        tipo_chasis: item.tipo_chasis,
-        cliente: item.cliente,
-        lugar: item.lugar,
-        obs: item.obs,
-      };
-
-      fetch(WEB_APP_URL, {
-        method: "POST",
-        mode: "no-cors",
-        cache: "no-cache",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      })
-        .then(() => {
-          msgBox.className = "cloud-status success";
-          msgBox.innerText = "✅ Sincronizado con Google Sheets con éxito";
-          setTimeout(() => (msgBox.style.display = "none"), 3000);
-        })
-        .catch((err) => {
-          console.error(err);
-          msgBox.className = "cloud-status error";
-          msgBox.innerText = "❌ Guardado localmente. Se subirá al recuperar señal.";
-        });
+      msgBox.className = "cloud-status syncing"; msgBox.innerText = "⏳ Sincronizando...";
+      fetch(WEB_APP_URL, { method:"POST", mode:"no-cors", cache:"no-cache", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ ts:item.ts, movimiento:MOV[item.tipo]?.label||item.tipo, ppu:item.ppu, contenedor:item.cont, tipo_chasis:item.tipo_chasis, cliente:item.cliente, lugar:item.lugar, obs:item.obs }) })
+        .then(() => { msgBox.className = "cloud-status success"; msgBox.innerText = "✅ Sincronizado con éxito"; setTimeout(() => msgBox.style.display="none", 3000); })
+        .catch((err) => { msgBox.className = "cloud-status error"; msgBox.innerText = "❌ Guardado localmente."; });
     }
 
     function actualizarGraficos() {
-      let ent = 0;
-      let sal = 0;
-      let html = "";
-
+      let ent=0, sal=0, html="";
       bitacora.forEach((r) => {
         if (r.tipo.startsWith("E")) ent++;
         if (r.tipo.startsWith("S")) sal++;
-
-        const labelMov = MOV[r.tipo]?.label || r.tipo;
-        const borderCol = MOV[r.tipo]?.bg || "#888";
-
-        html += `
-          <div class="log-item" style="border-left-color: ${borderCol};">
-            <span class="log-time">${r.ts.split(" ")[1] || ""}</span>
-            <p>${labelMov} — 🚘 ${r.ppu}</p>
-            <p>📦 Cont: ${r.cont} | 🛞 Chasis: ${r.tipo_chasis}</p>
-            <p>🏢 Cli: ${r.cliente} | 📍 Pos: ${r.lugar}</p>
-            ${r.obs !== "N/A" ? `<p style="font-style: italic; color: var(--txt3); margin-top: 2px;">⚠️ Obs: ${r.obs}</p>` : ""}
-          </div>
-        `;
+        const labelMov = MOV[r.tipo]?.label||r.tipo;
+        const borderCol = MOV[r.tipo]?.bg||"#888";
+        html += '<div class="log-item" style="border-left-color:'+borderCol+';">';
+        html += '<span class="log-time">'+(r.ts.split(" ")[1]||"")+'</span>';
+        html += '<p>'+labelMov+' — 🚘 '+r.ppu+'</p>';
+        html += '<p>📦 Cont: '+r.cont+' | 🛞 Chasis: '+r.tipo_chasis+'</p>';
+        html += '<p>🏢 Cli: '+r.cliente+' | 📍 Pos: '+r.lugar+'</p>';
+        if (r.obs !== "N/A") html += '<p style="font-style:italic;color:var(--txt3);margin-top:2px;">⚠️ Obs: '+r.obs+'</p>';
+        html += '</div>';
       });
-
       document.getElementById("stat-ent").innerText = ent;
       document.getElementById("stat-sal").innerText = sal;
-      document.getElementById("log-list").innerHTML = html || '<p style="color: var(--txt3); text-align: center; padding: 20px; font-size: 13px;">No hay registros hoy</p>';
-
-      const movCount = { E_V: 0, E_F: 0, S_D: 0, S_C: 0, INV: 0 };
-      bitacora.forEach((r) => {
-        if (movCount[r.tipo] !== undefined) movCount[r.tipo]++;
-      });
-
-      const maxMov = Math.max(...Object.values(movCount), 1);
-
-      document.getElementById("mov-chart").innerHTML = Object.entries(MOV)
-        .map(([k, m]) => {
-          const n = movCount[k];
-          const pct = Math.round((n / maxMov) * 100);
-          return `
-            <div class="bar-wrap">
-              <div class="bar-label">
-                <span style="font-size: 11px;">${m.label}</span>
-                <span style="font-weight: 700;">${n}</span>
-              </div>
-              <div class="bar-track">
-                <div class="bar-fill" style="width: ${pct}%; background: ${m.bg};"></div>
-              </div>
-            </div>
-          `;
-        })
-        .join("");
+      document.getElementById("log-list").innerHTML = html || '<p style="color:var(--txt3);text-align:center;padding:20px;font-size:13px;">No hay registros hoy</p>';
+      const movCount={E_V:0,E_F:0,S_D:0,S_C:0,INV:0};
+      bitacora.forEach((r) => { if (movCount[r.tipo]!==undefined) movCount[r.tipo]++; });
+      const maxMov = Math.max(...Object.values(movCount),1);
+      document.getElementById("mov-chart").innerHTML = Object.entries(MOV).map(([k,m]) => {
+        const n=movCount[k]; const pct=Math.round((n/maxMov)*100);
+        return '<div class="bar-wrap"><div class="bar-label"><span style="font-size:11px;">'+m.label+'</span><span style="font-weight:700;">'+n+'</span></div><div class="bar-track"><div class="bar-fill" style="width:'+pct+'%;background:'+m.bg+';"></div></div></div>';
+      }).join("");
     }
 
     function exportCSV() {
-      if (!bitacora.length) {
-        alert("Sin movimientos para exportar");
-        return;
-      }
-
-      const rows = [["Fecha y Hora", "Movimiento", "PPU", "Contenedor", "Tipo chasis", "Cliente", "Lugar", "Obs"]];
-
-      bitacora.forEach((r) =>
-        rows.push([r.ts, MOV[r.tipo]?.label || r.tipo, r.ppu, r.cont, r.tipo_chasis, r.cliente, r.lugar, r.obs])
-      );
-
-      const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + rows.map((e) => e.map((val) => `"${val}"`).join(",")).join("\n");
-
+      if (!bitacora.length) { alert("Sin movimientos para exportar"); return; }
+      const rows = [["Fecha y Hora","Movimiento","PPU","Contenedor","Tipo chasis","Cliente","Lugar","Obs"]];
+      bitacora.forEach((r) => rows.push([r.ts,MOV[r.tipo]?.label||r.tipo,r.ppu,r.cont,r.tipo_chasis,r.cliente,r.lugar,r.obs]));
+      const csvContent = "data:text/csv;charset=utf-8,﻿" + rows.map((e) => e.map((val) => '"'+val+'"').join(",")).join("
+");
       const link = document.createElement("a");
       link.setAttribute("href", encodeURI(csvContent));
-      link.setAttribute("download", `Inventario_Patio_${new Date().toISOString().split("T")[0]}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      link.setAttribute("download", "Inventario_Patio_"+new Date().toISOString().split("T")[0]+".csv");
+      document.body.appendChild(link); link.click(); document.body.removeChild(link);
     }
   </script>
 </body>
